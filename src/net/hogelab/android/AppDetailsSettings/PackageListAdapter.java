@@ -6,11 +6,15 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 //--------------------------------------------------
@@ -18,6 +22,7 @@ import android.widget.TextView;
 
 public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = PackageListAdapter.class.getSimpleName();
 
 
@@ -58,30 +63,52 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 	private static class PackageInfoCell {
 
+		private View			mView = null;
 		private PackageInfo		mInfo = null;
 
-		private TextView		mPackageName = null;
-		private TextView		mApplicationLabel = null;
 
 		public PackageInfoCell(View cellView) {
-			Log.d(TAG, "construct PackageInfoCell");
-
-			mPackageName = (TextView)cellView.findViewById(R.id.packageName);
-			mApplicationLabel = (TextView)cellView.findViewById(R.id.applicationLabel);
+			mView = cellView;
 		}
 
 
 		public void setInfo(Context context, PackageInfo info) {
 			mInfo = info;
 
-			mPackageName.setText(mInfo.packageName);
+			TextView packageName = (TextView)mView.findViewById(R.id.packageName);
+			if (packageName != null) {
+				packageName.setText(mInfo.packageName);
+			}
 
 			ApplicationInfo appInfo = info.applicationInfo;
 			if (appInfo != null) {
 				PackageManager pm = context.getPackageManager();
-				CharSequence label = appInfo.loadLabel(pm);
-				if (label != null) {
-					mApplicationLabel.setText(label);
+
+				TextView applicationLabel = (TextView)mView.findViewById(R.id.applicationLabel);
+				if (applicationLabel != null) {
+					CharSequence label = appInfo.loadLabel(pm);
+					if (label != null) {
+						applicationLabel.setText(label);
+					}
+				}
+
+				ImageView applicationIcon = (ImageView)mView.findViewById(R.id.applicationIcon);
+				if (applicationIcon != null) {
+					Drawable icon = appInfo.loadIcon(pm);
+					if (icon != null) {
+						applicationIcon.setImageDrawable(icon);
+					}
+				}
+
+				ImageView colorLabel = (ImageView)mView.findViewById(R.id.colorLabel);
+				if (colorLabel != null) {
+			        float[] r = new float[] { 10, 10, 10, 10, 10, 10, 10, 10 };
+					ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
+					//shape.setBounds(0, 0, 52, 52);
+					shape.setIntrinsicWidth(100);
+					shape.setIntrinsicHeight(100);
+					shape.getPaint().setColor(Color.RED);
+					colorLabel.setImageDrawable(shape);
 				}
 			}
 		}
