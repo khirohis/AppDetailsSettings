@@ -102,11 +102,10 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 				ImageView colorLabel = (ImageView)mView.findViewById(R.id.colorLabel);
 				if (colorLabel != null) {
-			        float[] r = new float[] { 10, 10, 10, 10, 10, 10, 10, 10 };
+			        float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
 					ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
-					//shape.setBounds(0, 0, 52, 52);
-					shape.setIntrinsicWidth(100);
-					shape.setIntrinsicHeight(100);
+					shape.setIntrinsicWidth(52);
+					shape.setIntrinsicHeight(52);
 					shape.getPaint().setColor(Color.RED);
 					colorLabel.setImageDrawable(shape);
 				}
