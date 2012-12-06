@@ -6,4 +6,7 @@
     <string name="icon_description">Icon</string>
     <string name="colorlabel_description">Label</string>
 
+    <string name="listup_application_type_category_title">Listup Application Type</string>
+    <string name="listup_application_type_title">Listup Application Type</string>
+    <string name="listup_application_type_summary">System / Download / Both</string>
 </resources>
