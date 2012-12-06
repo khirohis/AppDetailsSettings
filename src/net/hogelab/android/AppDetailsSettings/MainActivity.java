@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -26,6 +27,9 @@ public class MainActivity extends ListActivity {
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 
 
+	private String mCurrentListupApplicationType;
+
+
 	//--------------------------------------------------
 	// public functions
 
@@ -34,10 +38,23 @@ public class MainActivity extends ListActivity {
 		Log.v(TAG, "onCreate");
 
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 
-        PackageListAdapter adapter = new PackageListAdapter(this, getSystemPackages());
+		mCurrentListupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
+
+		PackageListAdapter adapter = new PackageListAdapter(this, getSystemPackages());
         setListAdapter(adapter);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		String setupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
+		if (mCurrentListupApplicationType != setupApplicationType) {
+			// reset list
+		}
 	}
 
 
@@ -47,6 +64,19 @@ public class MainActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    super.onOptionsItemSelected(item);
+
+	    switch(item.getItemId()){
+
+	    case R.id.menu_settings:
+	    	doSettings();
+	        return true;
+	    }
+
+	    return false;
+	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -74,5 +104,12 @@ public class MainActivity extends ListActivity {
 		}
 
 		return systemPackages;
+	}
+
+
+	private void doSettings() {
+		Intent intent=new Intent();
+		intent.setClassName(getPackageName(), getPackageName() + ".SettingsActivity");
+		startActivity(intent);
 	}
 }

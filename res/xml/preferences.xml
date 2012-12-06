@@ -3,7 +3,7 @@
 
 <PreferenceCategory android:title="@string/listup_application_type_category_title">
 	<ListPreference
-		android:key="listup_application_type"
+		android:key="listup_application_type_key"
 		android:title="@string/listup_application_type_title"
 		android:summary="@string/listup_application_type_summary"
 		android:entries="@array/listup_application_type_entries"
