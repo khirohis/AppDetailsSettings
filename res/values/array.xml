@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="listup_application_type_entries">
+		<item>System</item>
+		<item>Downloaded</item>
+		<item>Both</item>
+	</string-array>
+
+	<string-array name="listup_application_type_entryvalues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+</resources>
