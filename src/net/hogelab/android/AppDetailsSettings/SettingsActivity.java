@@ -9,6 +9,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+
+//--------------------------------------------------
+//class PackageDatabase
+
 public class SettingsActivity extends PreferenceActivity {
 
 	@SuppressWarnings("unused")
