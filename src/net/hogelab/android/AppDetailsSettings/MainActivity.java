@@ -1,15 +1,12 @@
 package net.hogelab.android.AppDetailsSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +24,8 @@ public class MainActivity extends ListActivity {
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 
 
-	private String mCurrentListupApplicationType;
+	private PackageModel	mPackageModel = null;
+	private String			mCurrentListupApplicationType = null;
 
 
 	//--------------------------------------------------
@@ -41,10 +39,9 @@ public class MainActivity extends ListActivity {
 
 		setContentView(R.layout.activity_main);
 
+		mPackageModel = new PackageModel(this);
 		mCurrentListupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
-
-		PackageListAdapter adapter = new PackageListAdapter(this, getSystemPackages());
-        setListAdapter(adapter);
+        setListAdapter(getPackageListAdapter());
 	}
 
 	@Override
@@ -53,7 +50,8 @@ public class MainActivity extends ListActivity {
 
 		String setupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
 		if (mCurrentListupApplicationType != setupApplicationType) {
-			// reset list
+			mCurrentListupApplicationType = setupApplicationType;
+	        setListAdapter(getPackageListAdapter());
 		}
 	}
 
@@ -92,23 +90,23 @@ public class MainActivity extends ListActivity {
 	//--------------------------------------------------
 	// private functions
 
-	private List<PackageInfo> getSystemPackages() {
-		List<PackageInfo> systemPackages = new ArrayList<PackageInfo>();
+	private PackageListAdapter getPackageListAdapter() {
+		List<PackageInfo> list = null;
 
-		PackageManager pm = this.getPackageManager();
-		List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-		for (PackageInfo info : packages) {
-			if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-				systemPackages.add(info);
-			}
+		if (mCurrentListupApplicationType.equals("0")) {
+			list = mPackageModel.getSystemPackages();
+		} else if (mCurrentListupApplicationType.equals("1")) {
+			list = mPackageModel.getDownloadedPackages();
+		} else if (mCurrentListupApplicationType.equals("2")) {
+			list = mPackageModel.getAllPackages();
 		}
 
-		return systemPackages;
+		return new PackageListAdapter(this, list);
 	}
 
 
 	private void doSettings() {
-		Intent intent=new Intent();
+		Intent intent = new Intent();
 		intent.setClassName(getPackageName(), getPackageName() + ".SettingsActivity");
 		startActivity(intent);
 	}
