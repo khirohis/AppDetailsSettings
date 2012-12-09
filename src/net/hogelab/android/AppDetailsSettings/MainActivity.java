@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 
 //--------------------------------------------------
-//class MainActivity
+// class MainActivity
 
 public class MainActivity extends ListActivity {
 

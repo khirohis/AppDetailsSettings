@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 //--------------------------------------------------
-//class PackageListAdapter
+// class PackageListAdapter
 
 public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 

@@ -10,7 +10,7 @@ import android.content.pm.PackageManager;
 
 
 //--------------------------------------------------
-//class PackageModel
+// class PackageModel
 
 public class PackageModel {
 
