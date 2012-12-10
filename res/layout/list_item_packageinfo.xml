@@ -15,8 +15,8 @@
 	    android:layout_height="52dp">
 
         <ImageView
-            android:id="@+id/colorLabel"
-            android:contentDescription="@string/colorlabel_description"
+            android:id="@+id/labelColor"
+            android:contentDescription="@string/labelcolor_description"
 		    android:layout_width="52dp"
 		    android:layout_height="52dp" />
 

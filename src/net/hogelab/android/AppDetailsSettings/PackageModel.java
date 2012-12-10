@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 
 
 //--------------------------------------------------
@@ -78,6 +82,15 @@ public class PackageModel {
 		return mDb.get(packageName);
 	}
 
+
+	public Drawable getLabelDrawable(int label_color) {
+		float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
+		ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
+		shape.setIntrinsicWidth(52);
+		shape.setIntrinsicHeight(52);
+		shape.getPaint().setColor(Color.RED);
+		return shape;
+	}
 
 	//--------------------------------------------------
 	// private functions

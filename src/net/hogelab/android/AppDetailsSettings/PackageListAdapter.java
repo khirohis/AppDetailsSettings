@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,17 +97,12 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 					}
 				}
 
-				ImageView colorLabel = (ImageView)mView.findViewById(R.id.colorLabel);
-				if (colorLabel != null) {
+				ImageView labelColor = (ImageView)mView.findViewById(R.id.labelColor);
+				if (labelColor != null) {
 					PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
 					int label_color = model.getLabelColor(appInfo.packageName);
 					if (label_color != 0) {
-						float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
-						ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
-						shape.setIntrinsicWidth(52);
-						shape.setIntrinsicHeight(52);
-						shape.getPaint().setColor(Color.RED);
-						colorLabel.setImageDrawable(shape);
+						labelColor.setImageDrawable(model.getLabelDrawable(label_color));
 					}
 				}
 			}
