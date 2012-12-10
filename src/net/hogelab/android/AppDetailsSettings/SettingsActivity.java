@@ -22,7 +22,7 @@ public class SettingsActivity extends PreferenceActivity {
 	//--------------------------------------------------
 	// static functions
 
-	public static String getSetupListupApplicationTypeSetting(Context context) {
+	public static String getListupApplicationTypeSetting(Context context) {
 		CharSequence key = context.getText(R.string.listup_application_type_key);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getString(key.toString(), "0");
@@ -58,7 +58,7 @@ public class SettingsActivity extends PreferenceActivity {
 			}
 		});
 
-		setListupApplicationTypeSummary(getSetupListupApplicationTypeSetting(this));
+		setListupApplicationTypeSummary(getListupApplicationTypeSetting(this));
 	}
 
 	private void setListupApplicationTypeSummary(CharSequence value) {

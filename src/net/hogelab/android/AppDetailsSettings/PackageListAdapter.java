@@ -102,12 +102,16 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 				ImageView colorLabel = (ImageView)mView.findViewById(R.id.colorLabel);
 				if (colorLabel != null) {
-			        float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
-					ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
-					shape.setIntrinsicWidth(52);
-					shape.setIntrinsicHeight(52);
-					shape.getPaint().setColor(Color.RED);
-					colorLabel.setImageDrawable(shape);
+					PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
+					int label_color = model.getLabelColor(appInfo.packageName);
+					if (label_color != 0) {
+						float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
+						ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
+						shape.setIntrinsicWidth(52);
+						shape.setIntrinsicHeight(52);
+						shape.getPaint().setColor(Color.RED);
+						colorLabel.setImageDrawable(shape);
+					}
 				}
 			}
 		}
