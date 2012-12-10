@@ -18,6 +18,7 @@ public class PackageModel {
 	private static final String TAG = PackageModel.class.getSimpleName();
 
 	private List<PackageInfo>	mAllPackages = null;
+	private PackageDatabase		mDb = null;
 
 
 	//--------------------------------------------------
@@ -25,6 +26,17 @@ public class PackageModel {
 
 	public PackageModel(Context context) {
 		setupAllPackages(context);
+
+		mDb = new PackageDatabase(context);
+		mDb.open();
+	}
+
+
+	public void shutdown() {
+		mAllPackages = null;
+
+		mDb.close();
+		mDb = null;
 	}
 
 
@@ -59,6 +71,11 @@ public class PackageModel {
 		}
 
 		return packages;
+	}
+
+
+	public int getLabelColor(String packageName) {
+		return mDb.get(packageName);
 	}
 
 

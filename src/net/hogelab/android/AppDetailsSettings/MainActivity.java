@@ -24,7 +24,6 @@ public class MainActivity extends ListActivity {
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 
 
-	private PackageModel	mPackageModel = null;
 	private String			mCurrentListupApplicationType = null;
 
 
@@ -33,26 +32,77 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// from Activity start, onStop
+		// to onStart
 		Log.v(TAG, "onCreate");
-
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 
-		mPackageModel = new PackageModel(this);
-		mCurrentListupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
+		mCurrentListupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
         setListAdapter(getPackageListAdapter());
+
+		//registerForContextMenu(getListView());
 	}
+
+
+	@Override
+	protected void onRestart() {
+		// from onStop
+		// to onStart
+		Log.v(TAG, "onRestart");
+		super.onRestart();
+	}
+
+
+	@Override
+	protected void onStart() {
+		// from onCreate, onRestart
+		// to onResume
+		Log.v(TAG, "onStart");
+		super.onStart();
+	}
+
 
 	@Override
 	protected void onResume() {
+		// from onStart, onPause
+		// to onPause
+		Log.v(TAG, "onResume");
 		super.onResume();
 
-		String setupApplicationType = SettingsActivity.getSetupListupApplicationTypeSetting(this);
+		String setupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
 		if (mCurrentListupApplicationType != setupApplicationType) {
 			mCurrentListupApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());
 		}
+	}
+
+
+	@Override
+	protected void onPause() {
+		// from onResume
+		// to onResume, onStop
+		Log.v(TAG, "onPause");
+		super.onPause();
+	}
+
+
+	@Override
+	protected void onStop() {
+		// from onPause
+		// to onDestroy, onRestart, onCreate
+		Log.v(TAG, "onStop");
+		super.onStop();
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		// from onStop
+		// to Activity shut down
+		Log.v(TAG, "onDestroy");
+		super.onDestroy();
 	}
 
 
@@ -76,6 +126,25 @@ public class MainActivity extends ListActivity {
 	    return false;
 	}
 
+
+	/*
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		if (v.getId() == getListView().getId()) {
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
+			PackageInfo item = (PackageInfo)getListView().getItemAtPosition(info.position);
+
+			menu.setHeaderTitle(item.packageName);
+			menu.add
+			String[] menuItems = getResources().getStringArray(R.array.menu);
+			for (int i = 0; i<menuItems.length; i++) {
+		    	menu.add(Menu.NONE, i, i, menuItems[i]);
+			}
+		}
+	}
+	*/
+
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		PackageInfo info = (PackageInfo)getListAdapter().getItem(position);
@@ -93,12 +162,13 @@ public class MainActivity extends ListActivity {
 	private PackageListAdapter getPackageListAdapter() {
 		List<PackageInfo> list = null;
 
+		PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
 		if (mCurrentListupApplicationType.equals("0")) {
-			list = mPackageModel.getSystemPackages();
+			list = model.getSystemPackages();
 		} else if (mCurrentListupApplicationType.equals("1")) {
-			list = mPackageModel.getDownloadedPackages();
+			list = model.getDownloadedPackages();
 		} else if (mCurrentListupApplicationType.equals("2")) {
-			list = mPackageModel.getAllPackages();
+			list = model.getAllPackages();
 		}
 
 		return new PackageListAdapter(this, list);
