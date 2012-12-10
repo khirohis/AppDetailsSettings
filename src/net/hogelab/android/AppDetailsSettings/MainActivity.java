@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 
 
@@ -40,9 +42,13 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 
 		mCurrentListupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
-        setListAdapter(getPackageListAdapter());
+		setListAdapter(getPackageListAdapter());
 
-		//registerForContextMenu(getListView());
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+				return true;
+			}
+		});
 	}
 
 
@@ -125,24 +131,6 @@ public class MainActivity extends ListActivity {
 
 	    return false;
 	}
-
-
-	/*
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		if (v.getId() == getListView().getId()) {
-			AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
-			PackageInfo item = (PackageInfo)getListView().getItemAtPosition(info.position);
-
-			menu.setHeaderTitle(item.packageName);
-			menu.add
-			String[] menuItems = getResources().getStringArray(R.array.menu);
-			for (int i = 0; i<menuItems.length; i++) {
-		    	menu.add(Menu.NONE, i, i, menuItems[i]);
-			}
-		}
-	}
-	*/
 
 
 	@Override
