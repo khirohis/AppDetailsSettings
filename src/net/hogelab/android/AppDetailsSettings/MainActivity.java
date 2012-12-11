@@ -1,10 +1,15 @@
 package net.hogelab.android.AppDetailsSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.util.Log;
@@ -24,6 +29,8 @@ public class MainActivity extends ListActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
+	private static final String	BUNDLE_KEY_POSITION = "position";
+	private static final String	BUNDLE_KEY_ID = "id";
 
 
 	private String			mCurrentListupApplicationType = null;
@@ -42,13 +49,9 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 
 		mCurrentListupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
-		setListAdapter(getPackageListAdapter());
 
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-				return true;
-			}
-		});
+		setListAdapter(getPackageListAdapter());
+		setListViewOnItemLongClickListener();
 	}
 
 
@@ -113,6 +116,33 @@ public class MainActivity extends ListActivity {
 
 
 	@Override
+	protected Dialog onCreateDialog(int id, Bundle bundle) {
+		switch (id) {
+
+		case R.id.dialog_labelcolor:
+			final long fid = bundle.getLong(BUNDLE_KEY_ID);
+
+			return new AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_labelcolor_title)
+            .setNegativeButton(android.R.string.cancel, null)
+            .setCancelable(true)
+            .setAdapter(getLabelColorListAdapter(), new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					onDialogLabelColorSelected(fid, arg1);
+				}
+			})
+            .create();
+
+		default:
+			break;
+		}
+
+		return null;
+	}
+
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
@@ -160,6 +190,34 @@ public class MainActivity extends ListActivity {
 		}
 
 		return new PackageListAdapter(this, list);
+	}
+
+	private LabelColorListAdapter getLabelColorListAdapter() {
+		List<Integer> list = new ArrayList<Integer>();
+
+		int[] entries = getResources().getIntArray(R.array.labelcolor_index_entries);
+		for (int i = 0; i < entries.length; i++) {
+			list.add(entries[i]);
+		}
+
+		return new LabelColorListAdapter(this, list);
+	}
+
+
+	private void setListViewOnItemLongClickListener() {
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+				Bundle bundle = new Bundle();
+				bundle.putInt(BUNDLE_KEY_POSITION, pos);
+				bundle.putLong(BUNDLE_KEY_ID, id);
+				showDialog(R.id.dialog_labelcolor, bundle);
+				return true;
+			}
+		});
+	}
+
+
+	private void onDialogLabelColorSelected(long id, int index) {
 	}
 
 
