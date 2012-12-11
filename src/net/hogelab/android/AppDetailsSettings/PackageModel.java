@@ -7,10 +7,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
 
 
 //--------------------------------------------------
@@ -21,6 +17,7 @@ public class PackageModel {
 	@SuppressWarnings("unused")
 	private static final String TAG = PackageModel.class.getSimpleName();
 
+	private Context				mContext = null;
 	private List<PackageInfo>	mAllPackages = null;
 	private PackageDatabase		mDb = null;
 
@@ -29,14 +26,16 @@ public class PackageModel {
 	// public functions
 
 	public PackageModel(Context context) {
-		setupAllPackages(context);
+		mContext = context;
+		setupAllPackages();
 
-		mDb = new PackageDatabase(context);
+		mDb = new PackageDatabase(mContext);
 		mDb.open();
 	}
 
 
 	public void shutdown() {
+		mContext = null;
 		mAllPackages = null;
 
 		mDb.close();
@@ -44,8 +43,8 @@ public class PackageModel {
 	}
 
 
-	public void resetAllPackages(Context context) {
-		setupAllPackages(context);
+	public void resetAllPackages() {
+		setupAllPackages();
 	}
 
 
@@ -83,20 +82,11 @@ public class PackageModel {
 	}
 
 
-	public Drawable getLabelDrawable(int label_color) {
-		float[] r = new float[] { 4, 4, 4, 4, 4, 4, 4, 4 };
-		ShapeDrawable shape = new ShapeDrawable(new RoundRectShape(r, null, null));
-		shape.setIntrinsicWidth(52);
-		shape.setIntrinsicHeight(52);
-		shape.getPaint().setColor(Color.RED);
-		return shape;
-	}
-
 	//--------------------------------------------------
 	// private functions
 
-	private void setupAllPackages(Context context) {
-		PackageManager pm = context.getPackageManager();
+	private void setupAllPackages() {
+		PackageManager pm = mContext.getPackageManager();
 		mAllPackages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
 	}
 }

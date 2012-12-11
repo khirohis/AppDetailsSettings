@@ -11,4 +11,28 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+
+	<integer-array name="labelcolor_index_entries">
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	    <item>3</item>
+	    <item>4</item>
+	</integer-array>
+
+	<string-array name="labelcolor_color_names">
+	    <item>None</item>
+	    <item>Red</item>
+   	    <item>Orange</item>
+   	    <item>Yellow</item>
+   	    <item>Green</item>
+   	</string-array>
+
+	<array name="labelcolor_colors">
+   	    <item>#FFFFFFFF</item>
+	    <item>#FFFF0000</item>
+   	    <item>#FFFFA500</item>
+   	    <item>#FFFFFF00</item>
+   	    <item>#FF00FF00</item>
+	</array>
 </resources>

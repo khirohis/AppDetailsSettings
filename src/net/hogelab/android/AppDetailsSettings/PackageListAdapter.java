@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 //--------------------------------------------------
 // class PackageListAdapter
 
@@ -62,6 +63,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 		private View			mView = null;
 		private PackageInfo		mInfo = null;
+		private int				mLabelColor = 0;
 
 
 		public PackageInfoCell(View cellView) {
@@ -71,39 +73,39 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 		public void setInfo(Context context, PackageInfo info) {
 			mInfo = info;
+			ApplicationInfo appInfo = info.applicationInfo;
+			PackageManager pm = context.getPackageManager();
 
-			TextView packageName = (TextView)mView.findViewById(R.id.packageName);
+			PackageModel pmodel = AppDetailsSettingsApplication.getApplication().getPackageModel();
+			mLabelColor = pmodel.getLabelColor(mInfo.packageName);
+			if (mLabelColor != 0) {
+				ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor);
+				if (labelColor != null) {
+					LabelColorModel lcmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
+					Drawable drawable = lcmodel.getLabelColorDrawable(mLabelColor);
+					labelColor.setImageDrawable(drawable);
+					drawable.setCallback(null);
+				}
+			}
+
+			Drawable icon = appInfo.loadIcon(pm);
+			if (icon != null) {
+				ImageView applicationIcon = (ImageView)mView.findViewById(R.id.application_icon);
+				if (applicationIcon != null) {
+					applicationIcon.setImageDrawable(icon);
+				}
+			}
+
+			TextView packageName = (TextView)mView.findViewById(R.id.package_name);
 			if (packageName != null) {
 				packageName.setText(mInfo.packageName);
 			}
 
-			ApplicationInfo appInfo = info.applicationInfo;
-			if (appInfo != null) {
-				PackageManager pm = context.getPackageManager();
-
-				TextView applicationLabel = (TextView)mView.findViewById(R.id.applicationLabel);
+			CharSequence label = appInfo.loadLabel(pm);
+			if (label != null) {
+				TextView applicationLabel = (TextView)mView.findViewById(R.id.application_label);
 				if (applicationLabel != null) {
-					CharSequence label = appInfo.loadLabel(pm);
-					if (label != null) {
-						applicationLabel.setText(label);
-					}
-				}
-
-				ImageView applicationIcon = (ImageView)mView.findViewById(R.id.applicationIcon);
-				if (applicationIcon != null) {
-					Drawable icon = appInfo.loadIcon(pm);
-					if (icon != null) {
-						applicationIcon.setImageDrawable(icon);
-					}
-				}
-
-				ImageView labelColor = (ImageView)mView.findViewById(R.id.labelColor);
-				if (labelColor != null) {
-					PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
-					int label_color = model.getLabelColor(appInfo.packageName);
-					if (label_color != 0) {
-						labelColor.setImageDrawable(model.getLabelDrawable(label_color));
-					}
+					applicationLabel.setText(label);
 				}
 			}
 		}

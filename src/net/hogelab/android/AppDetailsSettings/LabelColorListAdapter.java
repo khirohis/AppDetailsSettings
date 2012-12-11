@@ -3,6 +3,7 @@ package net.hogelab.android.AppDetailsSettings;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,14 @@ public class LabelColorListAdapter extends ArrayAdapter<Integer> {
 		LabelColorCell cell = null;
 
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.list_item_packageinfo, parent, false);
+			convertView = mInflater.inflate(R.layout.list_item_labelcolor, parent, false);
 			cell = new LabelColorCell(convertView);
 			convertView.setTag(cell);
 		} else {
 			cell = (LabelColorCell)convertView.getTag();
 		}
 
-		int data= getItem(position);
+		int data = getItem(position);
 		cell.setInfo(getContext(), data);
 
 		return convertView;
@@ -68,15 +69,20 @@ public class LabelColorListAdapter extends ArrayAdapter<Integer> {
 		public void setInfo(Context context, int data) {
 			mData = data;
 
-			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelColorSample);
+			LabelColorModel model = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
+
+			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor_sample);
 			if (labelColor != null) {
-				PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
-				labelColor.setImageDrawable(model.getLabelDrawable(data));
+				Drawable drawable = model.getLabelColorDrawable(mData);
+				labelColor.setImageDrawable(drawable);
+				drawable.setCallback(null);
+				
 			}
 
-			TextView labelColorName = (TextView)mView.findViewById(R.id.labelColorName);
+			TextView labelColorName = (TextView)mView.findViewById(R.id.labelcolor_name);
 			if (labelColorName != null) {
-				labelColorName.setText(Integer.toString(mData));
+				String colorName = model.getColorName(mData);
+				labelColorName.setText(colorName);
 			}
 		}
 	}

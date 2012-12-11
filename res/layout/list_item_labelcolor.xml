@@ -15,8 +15,12 @@
 	    android:layout_height="48dp">
 
         <ImageView
-            android:id="@+id/labelColorSample"
+            android:id="@+id/labelcolor_sample"
             android:contentDescription="@string/labelcolor_description"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="2dp"
 		    android:layout_width="48dp"
 		    android:layout_height="48dp" />
     </FrameLayout>
@@ -29,7 +33,7 @@
 		android:layout_marginLeft="4dp">
 
 		<TextView
-			android:id="@+id/labelColorName"
+			android:id="@+id/labelcolor_name"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:singleLine="true" />

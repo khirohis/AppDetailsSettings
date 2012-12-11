@@ -15,6 +15,7 @@ public class AppDetailsSettingsApplication extends Application {
 	private static AppDetailsSettingsApplication sSingleton = null;
 
 	private PackageModel		mPackageModel = null;
+	private LabelColorModel		mLabelColorModel = null;
 
 
 	//--------------------------------------------------
@@ -75,5 +76,14 @@ public class AppDetailsSettingsApplication extends Application {
 			mPackageModel.shutdown();
 			mPackageModel = null;
 		}
+	}
+
+
+	public LabelColorModel getLabelColorModel() {
+		if (mLabelColorModel == null) {
+			mLabelColorModel = new LabelColorModel(this);
+		}
+
+		return mLabelColorModel;
 	}
 }
