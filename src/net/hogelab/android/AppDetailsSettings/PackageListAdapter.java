@@ -73,25 +73,27 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 		public void setInfo(Context context, PackageInfo info) {
 			mInfo = info;
-			ApplicationInfo appInfo = info.applicationInfo;
-			PackageManager pm = context.getPackageManager();
 
-			PackageModel pmodel = AppDetailsSettingsApplication.getApplication().getPackageModel();
-			mLabelColor = pmodel.getLabelColor(mInfo.packageName);
-			if (mLabelColor != 0) {
-				ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor);
-				if (labelColor != null) {
-					LabelColorModel lcmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-					Drawable drawable = lcmodel.getLabelColorDrawable(mLabelColor);
+			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor);
+			if (labelColor != null) {
+				LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
+				mLabelColor = lmodel.getLabelColor(mInfo.packageName);
+				if (mLabelColor != 0) {
+					Drawable drawable = lmodel.getLabelColorDrawable(mLabelColor);
 					labelColor.setImageDrawable(drawable);
 					drawable.setCallback(null);
+				} else {
+					labelColor.setImageDrawable(null);
 				}
 			}
 
-			Drawable icon = appInfo.loadIcon(pm);
-			if (icon != null) {
-				ImageView applicationIcon = (ImageView)mView.findViewById(R.id.application_icon);
-				if (applicationIcon != null) {
+			PackageManager pm = context.getPackageManager();
+			ApplicationInfo appInfo = mInfo.applicationInfo;
+
+			ImageView applicationIcon = (ImageView)mView.findViewById(R.id.application_icon);
+			if (applicationIcon != null) {
+				Drawable icon = appInfo.loadIcon(pm);
+				if (icon != null) {
 					applicationIcon.setImageDrawable(icon);
 				}
 			}
@@ -101,11 +103,13 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 				packageName.setText(mInfo.packageName);
 			}
 
-			CharSequence label = appInfo.loadLabel(pm);
-			if (label != null) {
-				TextView applicationLabel = (TextView)mView.findViewById(R.id.application_label);
-				if (applicationLabel != null) {
+			TextView applicationLabel = (TextView)mView.findViewById(R.id.application_label);
+			if (applicationLabel != null) {
+				CharSequence label = appInfo.loadLabel(pm);
+				if (label != null) {
 					applicationLabel.setText(label);
+				} else {
+					applicationLabel.setText("");
 				}
 			}
 		}

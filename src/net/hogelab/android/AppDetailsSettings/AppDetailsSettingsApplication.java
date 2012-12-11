@@ -86,4 +86,11 @@ public class AppDetailsSettingsApplication extends Application {
 
 		return mLabelColorModel;
 	}
+
+	public void shutdownLabelColorModel() {
+		if (mLabelColorModel != null) {
+			mLabelColorModel.shutdown();
+			mLabelColorModel = null;
+		}
+	}
 }

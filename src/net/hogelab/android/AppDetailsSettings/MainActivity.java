@@ -30,7 +30,6 @@ public class MainActivity extends ListActivity {
 
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 	private static final String	BUNDLE_KEY_POSITION = "position";
-	private static final String	BUNDLE_KEY_ID = "id";
 
 
 	private String			mCurrentListupApplicationType = null;
@@ -120,7 +119,7 @@ public class MainActivity extends ListActivity {
 		switch (id) {
 
 		case R.id.dialog_labelcolor:
-			final long fid = bundle.getLong(BUNDLE_KEY_ID);
+			final int fposition = bundle.getInt(BUNDLE_KEY_POSITION);
 
 			return new AlertDialog.Builder(this)
             .setTitle(R.string.dialog_labelcolor_title)
@@ -129,7 +128,7 @@ public class MainActivity extends ListActivity {
             .setAdapter(getLabelColorListAdapter(), new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					onDialogLabelColorSelected(fid, arg1);
+					onDialogLabelColorSelected(fposition, arg1);
 				}
 			})
             .create();
@@ -209,7 +208,6 @@ public class MainActivity extends ListActivity {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
 				Bundle bundle = new Bundle();
 				bundle.putInt(BUNDLE_KEY_POSITION, pos);
-				bundle.putLong(BUNDLE_KEY_ID, id);
 				showDialog(R.id.dialog_labelcolor, bundle);
 				return true;
 			}
@@ -217,7 +215,13 @@ public class MainActivity extends ListActivity {
 	}
 
 
-	private void onDialogLabelColorSelected(long id, int index) {
+	private void onDialogLabelColorSelected(int position, int index) {
+		PackageInfo info = (PackageInfo)getListAdapter().getItem(position);
+		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
+		lmodel.setLabelColor(info.packageName, index);
+
+		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
+		adapter.notifyDataSetChanged();
 	}
 
 
