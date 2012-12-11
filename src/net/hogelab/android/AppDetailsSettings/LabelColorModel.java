@@ -18,6 +18,7 @@ public class LabelColorModel {
 	private static final int	INTRINSIC_SHAPE_SIZE = 52;
 
 	private Context				mContext = null;
+	private LabelColorDatabase	mDb = null;
 	private String[]			mNames = null;
 	private TypedArray			mColors = null;
 
@@ -25,8 +26,30 @@ public class LabelColorModel {
 	public LabelColorModel(Context context) {
 		mContext = context;
 
+		mDb = new LabelColorDatabase(mContext);
+		mDb.open();
+
 		mNames = mContext.getResources().getStringArray(R.array.labelcolor_color_names);
 		mColors = mContext.getResources().obtainTypedArray(R.array.labelcolor_colors);
+	}
+
+	public void shutdown() {
+		mContext = null;
+
+		mDb.close();
+		mDb = null;
+
+		mNames = null;
+		mColors = null;
+	}
+
+
+	public int getLabelColor(String packageName) {
+		return mDb.get(packageName);
+	}
+
+	public boolean setLabelColor(String packageName, int labelColor) {
+		return mDb.set(packageName, labelColor);
 	}
 
 

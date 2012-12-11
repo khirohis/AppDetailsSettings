@@ -10,10 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 //--------------------------------------------------
 // class PackageDatabase
 
-public class PackageDatabase extends SQLiteOpenHelper {
+public class LabelColorDatabase extends SQLiteOpenHelper {
 
 	@SuppressWarnings("unused")
-	private static final String TAG = PackageDatabase.class.getSimpleName();
+	private static final String TAG = LabelColorDatabase.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "packagedb";
 	private static final int	DATABASE_VERSION = 1;
@@ -43,7 +43,7 @@ public class PackageDatabase extends SQLiteOpenHelper {
 	//--------------------------------------------------
 	// public functions
 
-	public PackageDatabase(Context context) {
+	public LabelColorDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 

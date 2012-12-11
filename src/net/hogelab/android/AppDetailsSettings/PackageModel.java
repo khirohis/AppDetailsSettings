@@ -19,7 +19,6 @@ public class PackageModel {
 
 	private Context				mContext = null;
 	private List<PackageInfo>	mAllPackages = null;
-	private PackageDatabase		mDb = null;
 
 
 	//--------------------------------------------------
@@ -28,18 +27,12 @@ public class PackageModel {
 	public PackageModel(Context context) {
 		mContext = context;
 		setupAllPackages();
-
-		mDb = new PackageDatabase(mContext);
-		mDb.open();
 	}
 
 
 	public void shutdown() {
 		mContext = null;
 		mAllPackages = null;
-
-		mDb.close();
-		mDb = null;
 	}
 
 
@@ -74,11 +67,6 @@ public class PackageModel {
 		}
 
 		return packages;
-	}
-
-
-	public int getLabelColor(String packageName) {
-		return mDb.get(packageName);
 	}
 
 
