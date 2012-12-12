@@ -29,10 +29,10 @@ public class MainActivity extends ListActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
-	private static final String	BUNDLE_KEY_POSITION = "position";
 
 
 	private String			mCurrentListupApplicationType = null;
+	private int				mCurrentListPosition = -1;
 
 
 	//--------------------------------------------------
@@ -115,12 +115,10 @@ public class MainActivity extends ListActivity {
 
 
 	@Override
-	protected Dialog onCreateDialog(int id, Bundle bundle) {
+	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 
 		case R.id.dialog_labelcolor:
-			final int fposition = bundle.getInt(BUNDLE_KEY_POSITION);
-
 			return new AlertDialog.Builder(this)
             .setTitle(R.string.dialog_labelcolor_title)
             .setNegativeButton(android.R.string.cancel, null)
@@ -128,7 +126,7 @@ public class MainActivity extends ListActivity {
             .setAdapter(getLabelColorListAdapter(), new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
-					onDialogLabelColorSelected(fposition, arg1);
+					onDialogLabelColorSelected(arg1);
 				}
 			})
             .create();
@@ -205,23 +203,28 @@ public class MainActivity extends ListActivity {
 
 	private void setListViewOnItemLongClickListener() {
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-				Bundle bundle = new Bundle();
-				bundle.putInt(BUNDLE_KEY_POSITION, pos);
-				showDialog(R.id.dialog_labelcolor, bundle);
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
+				mCurrentListPosition = position;
+				showDialog(R.id.dialog_labelcolor);
 				return true;
 			}
 		});
 	}
 
 
-	private void onDialogLabelColorSelected(int position, int index) {
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(position);
+	private void onDialogLabelColorSelected(int index) {
+		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
+			return;
+		}
+
+		PackageInfo info = (PackageInfo)getListAdapter().getItem(mCurrentListPosition);
 		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
 		lmodel.setLabelColor(info.packageName, index);
 
 		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
 		adapter.notifyDataSetChanged();
+
+		mCurrentListPosition = -1;
 	}
 
 
