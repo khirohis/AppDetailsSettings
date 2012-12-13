@@ -1,5 +1,6 @@
 package net.hogelab.android.AppDetailsSettings;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 
@@ -36,34 +38,47 @@ public class SettingsActivity extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		addPreferencesFromResource(R.xml.preferences);
-
-		setupListupApplicationTypePreference();
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(android.R.id.content, new SettingsFragment());
+        ft.commit();
 	}
+
 
 	//--------------------------------------------------
-	// private functions
+	// class
 
-	private ListPreference getListupApplicationTypePreference() {
-		CharSequence key = getText(R.string.listup_application_type_key);
-		return (ListPreference)findPreference(key);
-	}
+	public static class SettingsFragment extends PreferenceFragment {
 
-	private void setupListupApplicationTypePreference() {
-		getListupApplicationTypePreference().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object value) {
-				setListupApplicationTypeSummary((CharSequence)value);
-				return true;
-			}
-		});
+		@Override
+		public void onCreate(final Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
 
-		setListupApplicationTypeSummary(getListupApplicationTypeSetting(this));
-	}
+			addPreferencesFromResource(R.xml.preferences);
+			setupListupApplicationTypePreference();
+		}
 
-	private void setListupApplicationTypeSummary(CharSequence value) {
-		ListPreference lp = getListupApplicationTypePreference();
-		int index = lp.findIndexOfValue((String)value);
-		lp.setSummary(lp.getEntries()[index]);
+
+		private ListPreference getListupApplicationTypePreference() {
+			CharSequence key = getText(R.string.listup_application_type_key);
+			return (ListPreference)findPreference(key);
+		}
+
+		private void setupListupApplicationTypePreference() {
+			getListupApplicationTypePreference().setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object value) {
+					setListupApplicationTypeSummary((CharSequence)value);
+					return true;
+				}
+			});
+
+			setListupApplicationTypeSummary(getListupApplicationTypeSetting(getActivity()));
+		}
+
+		private void setListupApplicationTypeSummary(CharSequence value) {
+			ListPreference lp = getListupApplicationTypePreference();
+			int index = lp.findIndexOfValue((String)value);
+			lp.setSummary(lp.getEntries()[index]);
+		}
 	}
 }
