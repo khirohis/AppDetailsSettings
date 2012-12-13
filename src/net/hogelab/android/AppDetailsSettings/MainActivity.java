@@ -1,15 +1,12 @@
 package net.hogelab.android.AppDetailsSettings;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import net.hogelab.android.AppDetailsSettings.Dialogs.LabelColorDialog;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.util.Log;
@@ -24,7 +21,7 @@ import android.widget.ListView;
 //--------------------------------------------------
 // class MainActivity
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements LabelColorDialog.LabelColorDialogOnClickListener {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -115,35 +112,11 @@ public class MainActivity extends ListActivity {
 
 
 	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-
-		case R.id.dialog_labelcolor:
-			return new AlertDialog.Builder(this)
-            .setTitle(R.string.dialog_labelcolor_title)
-            .setNegativeButton(android.R.string.cancel, null)
-            .setCancelable(true)
-            .setAdapter(getLabelColorListAdapter(), new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					onDialogLabelColorSelected(arg1);
-				}
-			})
-            .create();
-
-		default:
-			break;
-		}
-
-		return null;
-	}
-
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,37 +162,31 @@ public class MainActivity extends ListActivity {
 		return new PackageListAdapter(this, list);
 	}
 
-	private LabelColorListAdapter getLabelColorListAdapter() {
-		List<Integer> list = new ArrayList<Integer>();
-
-		int[] entries = getResources().getIntArray(R.array.labelcolor_index_entries);
-		for (int i = 0; i < entries.length; i++) {
-			list.add(entries[i]);
-		}
-
-		return new LabelColorListAdapter(this, list);
-	}
-
 
 	private void setListViewOnItemLongClickListener() {
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
 				mCurrentListPosition = position;
-				showDialog(R.id.dialog_labelcolor);
-				return true;
+
+				LabelColorDialog dialog = LabelColorDialog.newInstance();
+                dialog.show(getFragmentManager(), "dialog");
+
+                return true;
 			}
 		});
 	}
 
 
-	private void onDialogLabelColorSelected(int index) {
+
+	@Override
+	public void onClickLabelColorDialogList(int position) {
 		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
 			return;
 		}
 
 		PackageInfo info = (PackageInfo)getListAdapter().getItem(mCurrentListPosition);
 		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-		lmodel.setLabelColor(info.packageName, index);
+		lmodel.setLabelColor(info.packageName, position);
 
 		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
 		adapter.notifyDataSetChanged();
