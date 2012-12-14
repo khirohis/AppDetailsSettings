@@ -1,40 +1,21 @@
 package net.hogelab.android.AppDetailsSettings.Activity;
 
-import java.util.List;
-
-import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.R;
-import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
-import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
-import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
-import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ListView;
 
 
 //--------------------------------------------------
 // class MainActivity
 
-public class MainActivity extends ListActivity implements LabelColorDialog.LabelColorDialogOnClickListener {
+public class MainActivity extends Activity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
-
-	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
-
-
-	private String			mCurrentListupApplicationType = null;
-	private int				mCurrentListPosition = -1;
 
 
 	//--------------------------------------------------
@@ -42,17 +23,12 @@ public class MainActivity extends ListActivity implements LabelColorDialog.Label
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// from Activity start, onStop
+		// from Activity starts, onStop
 		// to onStart
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-
-		mCurrentListupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
-
-		setListAdapter(getPackageListAdapter());
-		setListViewOnItemLongClickListener();
 	}
 
 
@@ -77,21 +53,15 @@ public class MainActivity extends ListActivity implements LabelColorDialog.Label
 	@Override
 	protected void onResume() {
 		// from onStart, onPause
-		// to onPause
+		// to Activity is running
 		Log.v(TAG, "onResume");
 		super.onResume();
-
-		String setupApplicationType = SettingsActivity.getListupApplicationTypeSetting(this);
-		if (mCurrentListupApplicationType != setupApplicationType) {
-			mCurrentListupApplicationType = setupApplicationType;
-	        setListAdapter(getPackageListAdapter());
-		}
 	}
 
 
 	@Override
 	protected void onPause() {
-		// from onResume
+		// from Activity running
 		// to onResume, onStop
 		Log.v(TAG, "onPause");
 		super.onPause();
@@ -110,7 +80,7 @@ public class MainActivity extends ListActivity implements LabelColorDialog.Label
 	@Override
 	protected void onDestroy() {
 		// from onStop
-		// to Activity shut down
+		// to Activity is shut down
 		Log.v(TAG, "onDestroy");
 		super.onDestroy();
 	}
@@ -138,67 +108,8 @@ public class MainActivity extends ListActivity implements LabelColorDialog.Label
 	}
 
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(position);
-		if (info != null) {
-			Uri uri = Uri.parse("package:" + info.packageName);
-			Intent intent = new Intent(APPLICATION_DETAILS_SETTINGS, uri);
-			startActivityForResult(intent, 0);
-		}
-    }
-
-
 	//--------------------------------------------------
 	// private functions
-
-	private PackageListAdapter getPackageListAdapter() {
-		List<PackageInfo> list = null;
-
-		PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
-		if (mCurrentListupApplicationType.equals("0")) {
-			list = model.getSystemPackages();
-		} else if (mCurrentListupApplicationType.equals("1")) {
-			list = model.getDownloadedPackages();
-		} else if (mCurrentListupApplicationType.equals("2")) {
-			list = model.getAllPackages();
-		}
-
-		return new PackageListAdapter(this, list);
-	}
-
-
-	private void setListViewOnItemLongClickListener() {
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
-				mCurrentListPosition = position;
-
-				LabelColorDialog dialog = LabelColorDialog.newInstance();
-                dialog.show(getFragmentManager(), "dialog");
-
-                return true;
-			}
-		});
-	}
-
-
-
-	@Override
-	public void onClickLabelColorDialogList(int position) {
-		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
-			return;
-		}
-
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(mCurrentListPosition);
-		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-		lmodel.setLabelColor(info.packageName, position);
-
-		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
-		adapter.notifyDataSetChanged();
-
-		mCurrentListPosition = -1;
-	}
-
 
 	private void doSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);
