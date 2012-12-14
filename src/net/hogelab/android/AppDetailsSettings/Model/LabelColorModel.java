@@ -1,5 +1,6 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.Model;
 
+import net.hogelab.android.AppDetailsSettings.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;

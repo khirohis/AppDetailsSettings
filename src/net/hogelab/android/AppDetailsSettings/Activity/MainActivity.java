@@ -1,8 +1,13 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.Activity;
 
 import java.util.List;
 
-import net.hogelab.android.AppDetailsSettings.Dialogs.LabelColorDialog;
+import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
+import net.hogelab.android.AppDetailsSettings.R;
+import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
+import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
+import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
+import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -196,8 +201,8 @@ public class MainActivity extends ListActivity implements LabelColorDialog.Label
 
 
 	private void doSettings() {
-		Intent intent = new Intent();
-		intent.setClassName(getPackageName(), getPackageName() + ".SettingsActivity");
+		Intent intent = new Intent(this, SettingsActivity.class);
+		intent.setAction(Intent.ACTION_VIEW);
 		startActivity(intent);
 	}
 }

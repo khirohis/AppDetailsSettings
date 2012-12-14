@@ -1,10 +1,11 @@
-package net.hogelab.android.AppDetailsSettings.Dialogs;
+package net.hogelab.android.AppDetailsSettings.Dialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.hogelab.android.AppDetailsSettings.LabelColorListAdapter;
+import net.hogelab.android.AppDetailsSettings.ListAdapter.LabelColorListAdapter;
 import net.hogelab.android.AppDetailsSettings.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;

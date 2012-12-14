@@ -1,6 +1,10 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.ListAdapter;
 
 import java.util.List;
+
+import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
+import net.hogelab.android.AppDetailsSettings.R;
+import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
