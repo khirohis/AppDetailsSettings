@@ -46,7 +46,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 		PackageInfoCell cell = null;
 
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.list_item_packageinfo, parent, false);
+			convertView = mInflater.inflate(R.layout.list_item_packagelist, parent, false);
 			cell = new PackageInfoCell(convertView);
 			convertView.setTag(cell);
 		} else {
