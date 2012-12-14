@@ -1,4 +1,4 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.Model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,8 @@
 package net.hogelab.android.AppDetailsSettings;
 
+import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
+import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
+
 import android.app.Application;
 import android.content.res.Configuration;
 import android.util.Log;

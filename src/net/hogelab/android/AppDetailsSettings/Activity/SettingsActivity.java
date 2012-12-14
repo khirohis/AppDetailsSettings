@@ -1,4 +1,6 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.Activity;
+
+import net.hogelab.android.AppDetailsSettings.R;
 
 import android.app.FragmentTransaction;
 import android.content.Context;

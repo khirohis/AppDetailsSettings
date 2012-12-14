@@ -1,4 +1,4 @@
-package net.hogelab.android.AppDetailsSettings;
+package net.hogelab.android.AppDetailsSettings.Model;
 
 import android.content.ContentValues;
 import android.content.Context;
