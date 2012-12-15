@@ -1,7 +1,7 @@
 package net.hogelab.android.AppDetailsSettings.Fragment;
 
 import net.hogelab.android.AppDetailsSettings.R;
-import net.hogelab.android.AppDetailsSettings.Activity.SettingsActivity;
+import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -38,7 +38,7 @@ public class ListSettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		setListupApplicationTypeSummary(SettingsActivity.getListupApplicationTypeSetting(getActivity()));
+		setListupApplicationTypeSummary(ApplicationSettings.getListupApplicationTypeSetting());
 	}
 
 	private void setListupApplicationTypeSummary(CharSequence value) {

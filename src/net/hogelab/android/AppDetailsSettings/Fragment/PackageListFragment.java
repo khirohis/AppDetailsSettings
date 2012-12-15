@@ -3,7 +3,7 @@ package net.hogelab.android.AppDetailsSettings.Fragment;
 import java.util.List;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
-import net.hogelab.android.AppDetailsSettings.Activity.SettingsActivity;
+import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
@@ -72,7 +72,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		Log.v(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
-		mCurrentListupApplicationType = SettingsActivity.getListupApplicationTypeSetting(getActivity());
+		mCurrentListupApplicationType = ApplicationSettings.getListupApplicationTypeSetting();
 
 		setListAdapter(getPackageListAdapter());
 		setListViewOnItemLongClickListener();
@@ -94,7 +94,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		// to Fragment is active
 		super.onResume();
 
-		String setupApplicationType = SettingsActivity.getListupApplicationTypeSetting(getActivity());
+		String setupApplicationType = ApplicationSettings.getListupApplicationTypeSetting();
 		if (mCurrentListupApplicationType != setupApplicationType) {
 			mCurrentListupApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());
