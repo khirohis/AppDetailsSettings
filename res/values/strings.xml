@@ -6,11 +6,11 @@
     <string name="menu_settings">Settings</string>
 
     <string name="settings_title">Settings</string>
-    <string name="listup_application_type_category_title">Listup Application Type</string>
-    <string name="listup_application_type_key">listup_application_type_key</string>
-    <string name="listup_application_type_title">Listup Application Type</string>
-    <string name="listup_application_type_summary">System / Downloaded / Both</string>
-    <string name="listup_application_type_dialogtitle">Select Listup Application Type</string>
+    <string name="listing_application_type_category_title">Listing Application Type</string>
+    <string name="listing_application_type_key">listing_application_type_key</string>
+    <string name="listing_application_type_title">Listing Application Type</string>
+    <string name="listing_application_type_summary">System / Downloaded / Both</string>
+    <string name="listing_application_type_dialogtitle">Select Listing Application Type</string>
 
     <string name="dialog_labelcolor_title">Label Color</string>
 

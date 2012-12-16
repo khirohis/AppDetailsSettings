@@ -34,7 +34,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 
 
-	private String			mCurrentListupApplicationType = null;
+	private String			mCurrentListingApplicationType = null;
 	private int				mCurrentListPosition = -1;
 
 
@@ -72,7 +72,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		Log.v(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
-		mCurrentListupApplicationType = ApplicationSettings.getListupApplicationTypeSetting();
+		mCurrentListingApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
 
 		setListAdapter(getPackageListAdapter());
 		setListViewOnItemLongClickListener();
@@ -94,9 +94,9 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		// to Fragment is active
 		super.onResume();
 
-		String setupApplicationType = ApplicationSettings.getListupApplicationTypeSetting();
-		if (mCurrentListupApplicationType != setupApplicationType) {
-			mCurrentListupApplicationType = setupApplicationType;
+		String setupApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
+		if (mCurrentListingApplicationType != setupApplicationType) {
+			mCurrentListingApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());
 		}
 	}
@@ -159,11 +159,11 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		List<PackageInfo> list = null;
 
 		PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
-		if (mCurrentListupApplicationType.equals("0")) {
+		if (mCurrentListingApplicationType.equals("0")) {
 			list = model.getSystemPackages();
-		} else if (mCurrentListupApplicationType.equals("1")) {
+		} else if (mCurrentListingApplicationType.equals("1")) {
 			list = model.getDownloadedPackages();
-		} else if (mCurrentListupApplicationType.equals("2")) {
+		} else if (mCurrentListingApplicationType.equals("2")) {
 			list = model.getAllPackages();
 		}
 
