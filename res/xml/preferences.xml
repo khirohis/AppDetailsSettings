@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<PreferenceCategory android:title="@string/listup_application_type_category_title">
+<PreferenceCategory android:title="@string/listing_application_type_category_title">
 	<ListPreference
-		android:key="listup_application_type_key"
-		android:title="@string/listup_application_type_title"
-		android:summary="@string/listup_application_type_summary"
-		android:entries="@array/listup_application_type_entries"
-		android:entryValues="@array/listup_application_type_entryvalues"
-		android:dialogTitle="@string/listup_application_type_dialogtitle" />
+		android:key="listing_application_type_key"
+		android:title="@string/listing_application_type_title"
+		android:summary="@string/listing_application_type_summary"
+		android:entries="@array/listing_application_type_entries"
+		android:entryValues="@array/listing_application_type_entryvalues"
+		android:dialogTitle="@string/listing_application_type_dialogtitle" />
 </PreferenceCategory>
 
 </PreferenceScreen>
