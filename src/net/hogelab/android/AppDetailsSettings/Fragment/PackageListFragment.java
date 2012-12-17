@@ -176,7 +176,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
 				mCurrentListPosition = position;
 
-				LabelColorDialog dialog = LabelColorDialog.newInstance();
+				LabelColorDialog dialog = LabelColorDialog.newInstance(PackageListFragment.this);
                 dialog.show(getFragmentManager(), "dialog");
 
                 return true;
