@@ -22,6 +22,8 @@ public class LabelColorDialog extends DialogFragment implements DialogInterface.
 
 	private static final String TAG = LabelColorDialog.class.getSimpleName();
 
+	private LabelColorDialogOnClickListener mOnClickListener = null;
+
 
 	//--------------------------------------------------
 	// interfaces
@@ -34,8 +36,9 @@ public class LabelColorDialog extends DialogFragment implements DialogInterface.
 	//--------------------------------------------------
 	// static functions
 
-	public static LabelColorDialog newInstance() {
+	public static LabelColorDialog newInstance(LabelColorDialogOnClickListener listener) {
 		LabelColorDialog dialog = new LabelColorDialog();
+		dialog.mOnClickListener = listener;
 		dialog.setCancelable(true);
 
 		return dialog;
@@ -77,7 +80,7 @@ public class LabelColorDialog extends DialogFragment implements DialogInterface.
 
 	private LabelColorDialogOnClickListener getListener() {
 		try {
-			return (LabelColorDialogOnClickListener)getActivity();
+			return (LabelColorDialogOnClickListener)mOnClickListener;
 		} catch (ClassCastException e) {
 			Log.e(TAG, "must implement onClickLabelColorDialog");
 		}
