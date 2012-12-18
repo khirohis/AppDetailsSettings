@@ -138,6 +138,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onDetach() {
 		// from onDestroy
 		// to Fragment is destroyed
+		super.onDetach();
 	}
 
 
