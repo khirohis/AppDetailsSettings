@@ -9,7 +9,7 @@ import android.util.Log;
 
 
 //--------------------------------------------------
-//class MainActivity
+// class AppDetailsSettingsApplication
 
 public class AppDetailsSettingsApplication extends Application {
 
