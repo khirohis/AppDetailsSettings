@@ -4,22 +4,24 @@ package net.hogelab.android.PFW;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 
 //--------------------------------------------------
 // class PFWModel
 
 public class PFWModel {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = PFWPresenter.class.getSimpleName();
+	private static final String TAG = PFWModel.class.getSimpleName();
 
+	public static final int		HINT_DATA_NONE = 0;
 
-	private int serialNumber = 0;
+	private int serialNumber = HINT_DATA_NONE;
 	private List<PFWModelUpdateListener> listeners;
 
 
 	//--------------------------------------------------
-	// interfaces
+	// public interfaces
 
 	public interface PFWModelUpdateListener {
 		public void onModelUpdate(PFWModel model, int updateHint);
@@ -39,19 +41,33 @@ public class PFWModel {
 	}
 
 	public synchronized void addListener(PFWModelUpdateListener listener) {
+		Log.v(TAG, "addListener");
+
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
+			Log.v(TAG, "added listener:" + listener.toString());
 		}
 	}
 
 	public synchronized void removeListener(PFWModelUpdateListener listener) {
+		Log.v(TAG, "removeListener");
+
 		if (listeners.contains(listener)) {
 			listeners.remove(listener);
+			Log.v(TAG, "removed listener:" + listener.toString());
+
+			if (listeners.size() == 0) {
+				onNoListener();
+			}
 		}
 	}
 
 	public synchronized void removeAllListener() {
+		Log.v(TAG, "removeAllListener");
+
 		listeners = new ArrayList<PFWModelUpdateListener>();
+
+		onNoListener();
 	}
 
 
@@ -63,7 +79,9 @@ public class PFWModel {
 	//--------------------------------------------------
 	// protected functions
 
-	protected synchronized void update() {
+	protected synchronized void updated() {
+		Log.v(TAG, "updated");
+
 		int updateHint;
 		synchronized (this) {
 			updateHint = ++serialNumber;
@@ -73,13 +91,21 @@ public class PFWModel {
 	}
 
 	protected void notifyUpdate(int updateHint) {
+		Log.v(TAG, "notifyUpdate");
+
 		List<PFWModelUpdateListener> listenersCopy = new ArrayList<PFWModelUpdateListener>();
 		synchronized (this) {
 			listenersCopy.addAll(listeners);
 		}
 
 		for (PFWModelUpdateListener listener : listenersCopy) {
+			Log.v(TAG, "notify update to:" + listener.toString());
 			listener.onModelUpdate(this, updateHint);
 		}
+	}
+
+
+	protected void onNoListener() {
+		Log.v(TAG, "onNoListener");
 	}
 }
