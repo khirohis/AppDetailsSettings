@@ -8,6 +8,8 @@ import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
+import net.hogelab.android.AppDetailsSettings.Presenter.PackageListPresenter;
+import net.hogelab.android.PFW.PFWPresenter.PFWPassiveView;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -27,13 +29,15 @@ import android.widget.AdapterView.OnItemLongClickListener;
 //--------------------------------------------------
 // class MainActivity
 
-public class PackageListFragment extends ListFragment implements LabelColorDialog.LabelColorDialogOnClickListener {
+public class PackageListFragment extends ListFragment
+		implements LabelColorDialog.LabelColorDialogOnClickListener, PFWPassiveView {
 
 	private static final String TAG = PackageListFragment.class.getSimpleName();
 
 	private static final String APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
 
 
+	private PackageListPresenter presenter;
 	private String			mCurrentListingApplicationType = null;
 	private int				mCurrentListPosition = -1;
 
@@ -44,6 +48,8 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		// to onCreate
 		Log.v(TAG, "onAttach");
 		super.onAttach(activity);
+
+		presenter = new PackageListPresenter(this);
 	}
 
 
@@ -53,6 +59,8 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		// to onCreateView
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+
+		presenter.onViewCreate();
 	}
 
 
@@ -92,6 +100,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onResume() {
 		// from onStart
 		// to Fragment is active
+		Log.v(TAG, "onResume");
 		super.onResume();
 
 		String setupApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
@@ -99,6 +108,8 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 			mCurrentListingApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());
 		}
+
+		presenter.onViewShow();
 	}
 
 
@@ -106,7 +117,10 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onPause() {
 		// from Fragment is active
 		// to onStop
+		Log.v(TAG, "onPause");
 		super.onPause();
+
+		presenter.onViewHide();
 	}
 
 
@@ -114,6 +128,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onStop() {
 		// from onPause
 		// to onDestroyView
+		Log.v(TAG, "onStop");
 		super.onStop();
 	}
 
@@ -122,6 +137,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onDestroyView() {
 		// from onStop
 		// to onDestroy
+		Log.v(TAG, "onDestroyView");
 		super.onDestroyView();
 	}
 
@@ -130,7 +146,11 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onDestroy() {
 		// from onDestroyView
 		// to onDetach
+		Log.v(TAG, "onDestroy");
 		super.onDestroy();
+
+		presenter.onViewDestroy();
+		presenter = null;
 	}
 
 
@@ -138,6 +158,7 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	public void onDetach() {
 		// from onDestroy
 		// to Fragment is destroyed
+		Log.v(TAG, "onDetach");
 		super.onDetach();
 	}
 
@@ -186,7 +207,6 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 	}
 
 
-
 	@Override
 	public void onClickLabelColorDialogList(int position) {
 		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
@@ -201,5 +221,20 @@ public class PackageListFragment extends ListFragment implements LabelColorDialo
 		adapter.notifyDataSetChanged();
 
 		mCurrentListPosition = -1;
+	}
+
+
+	@Override
+	public void onUpdatingContent(Object tag) {
+	}
+
+
+	@Override
+	public void onUpdatedContent(Object tag) {
+	}
+
+
+	@Override
+	public void onUpdateContentError(Object tag) {
 	}
 }

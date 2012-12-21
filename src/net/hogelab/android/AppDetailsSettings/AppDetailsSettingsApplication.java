@@ -1,5 +1,6 @@
 package net.hogelab.android.AppDetailsSettings;
 
+import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 
@@ -17,8 +18,9 @@ public class AppDetailsSettingsApplication extends Application {
 
 	private static AppDetailsSettingsApplication sSingleton = null;
 
-	private PackageModel		mPackageModel = null;
-	private LabelColorModel		mLabelColorModel = null;
+	private PackageModel		packageModel = null;
+	private PackageListModel	packageListModel = null;
+	private LabelColorModel		labelColorModel = null;
 
 
 	//--------------------------------------------------
@@ -66,34 +68,43 @@ public class AppDetailsSettingsApplication extends Application {
 	}
 
 
-	public PackageModel getPackageModel() {
-		if (mPackageModel == null) {
-			mPackageModel = new PackageModel(this);
+	public PackageListModel getPackageListModel() {
+		if (packageListModel == null) {
+			packageListModel = new PackageListModel(this);
 		}
 
-		return mPackageModel;
+		return packageListModel;
+	}
+
+
+	public PackageModel getPackageModel() {
+		if (packageModel == null) {
+			packageModel = new PackageModel(this);
+		}
+
+		return packageModel;
 	}
 
 	public void shutdownPackageModel() {
-		if (mPackageModel != null) {
-			mPackageModel.shutdown();
-			mPackageModel = null;
+		if (packageModel != null) {
+			packageModel.shutdown();
+			packageModel = null;
 		}
 	}
 
 
 	public LabelColorModel getLabelColorModel() {
-		if (mLabelColorModel == null) {
-			mLabelColorModel = new LabelColorModel(this);
+		if (labelColorModel == null) {
+			labelColorModel = new LabelColorModel(this);
 		}
 
-		return mLabelColorModel;
+		return labelColorModel;
 	}
 
 	public void shutdownLabelColorModel() {
-		if (mLabelColorModel != null) {
-			mLabelColorModel.shutdown();
-			mLabelColorModel = null;
+		if (labelColorModel != null) {
+			labelColorModel.shutdown();
+			labelColorModel = null;
 		}
 	}
 }
