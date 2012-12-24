@@ -1,5 +1,6 @@
 package net.hogelab.android.PFW;
 
+import android.app.Activity;
 import android.util.Log;
 
 
@@ -11,24 +12,30 @@ public abstract class PFWPresenter {
 	private static final String TAG = PFWPresenter.class.getSimpleName();
 
 
-	protected PFWPassiveView presentView;
+	protected Activity			mActivity;
+
+	protected PFWPresentView	mPresentView;
+	protected boolean			mPresentViewVisible;
 
 
 	//--------------------------------------------------
 	// public interfaces
 
-	public interface PFWPassiveView {
-		public void onUpdatingContent(Object tag);
-		public void onUpdatedContent(Object tag);
-		public void onUpdateContentError(Object tag);
+	public interface PFWPresentView {
+		public void onContentLoading(Object tag);
+		public void onContentLoaded(Object tag);
+		public void onContentLoadError(Object tag);
 	}
 
 
 	//--------------------------------------------------
 	// public functions
 
-	public PFWPresenter(PFWPassiveView view) {
-		presentView = view;
+	public PFWPresenter(Activity activity, PFWPresentView view) {
+		mActivity = activity;
+
+		mPresentView = view;
+		mPresentViewVisible = false;
 	}
 
 
@@ -36,20 +43,27 @@ public abstract class PFWPresenter {
 		Log.v(TAG, "onViewCreate");
 	}
 
+
 	public void onViewShow() {
 		Log.v(TAG, "onViewShow");
+
+		mPresentViewVisible = true;
 	}
+
 
 	public void onViewHide() {
 		Log.v(TAG, "onViewHide");
+
+		mPresentViewVisible = false;
 	}
+
 
 	public void onViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
 
-		presentView = null;
+		mPresentView = null;
 	}
 
 
-	public abstract void updateContent(Object tag);
+	public abstract void loadContent(Object tag);
 }

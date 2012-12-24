@@ -14,10 +14,10 @@ public class PFWModel {
 
 	private static final String TAG = PFWModel.class.getSimpleName();
 
-	public static final int		HINT_DATA_NONE = 0;
+	public static final int		DATA_NONE_HINT = 0;
 
-	private int serialNumber = HINT_DATA_NONE;
-	private List<PFWModelUpdateListener> listeners;
+	private int					mSerialNumber = DATA_NONE_HINT;
+	private List<PFWModelUpdateListener> mListeners;
 
 
 	//--------------------------------------------------
@@ -32,19 +32,19 @@ public class PFWModel {
 	// public functions
 
 	public PFWModel() {
-		listeners = new ArrayList<PFWModelUpdateListener>();
+		mListeners = new ArrayList<PFWModelUpdateListener>();
 	}
 
 
 	public synchronized int countListener() {
-		return listeners.size();
+		return mListeners.size();
 	}
 
 	public synchronized void addListener(PFWModelUpdateListener listener) {
 		Log.v(TAG, "addListener");
 
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
+		if (!mListeners.contains(listener)) {
+			mListeners.add(listener);
 			Log.v(TAG, "added listener:" + listener.toString());
 		}
 	}
@@ -52,11 +52,11 @@ public class PFWModel {
 	public synchronized void removeListener(PFWModelUpdateListener listener) {
 		Log.v(TAG, "removeListener");
 
-		if (listeners.contains(listener)) {
-			listeners.remove(listener);
+		if (mListeners.contains(listener)) {
+			mListeners.remove(listener);
 			Log.v(TAG, "removed listener:" + listener.toString());
 
-			if (listeners.size() == 0) {
+			if (mListeners.size() == 0) {
 				onNoListener();
 			}
 		}
@@ -65,14 +65,14 @@ public class PFWModel {
 	public synchronized void removeAllListener() {
 		Log.v(TAG, "removeAllListener");
 
-		listeners = new ArrayList<PFWModelUpdateListener>();
+		mListeners = new ArrayList<PFWModelUpdateListener>();
 
 		onNoListener();
 	}
 
 
 	public synchronized int getUpdateHint() {
-		return serialNumber;
+		return mSerialNumber;
 	}
 
 
@@ -84,7 +84,7 @@ public class PFWModel {
 
 		int updateHint;
 		synchronized (this) {
-			updateHint = ++serialNumber;
+			updateHint = ++mSerialNumber;
 		}
 
 		notifyUpdate(updateHint);
@@ -95,7 +95,7 @@ public class PFWModel {
 
 		List<PFWModelUpdateListener> listenersCopy = new ArrayList<PFWModelUpdateListener>();
 		synchronized (this) {
-			listenersCopy.addAll(listeners);
+			listenersCopy.addAll(mListeners);
 		}
 
 		for (PFWModelUpdateListener listener : listenersCopy) {
