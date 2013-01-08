@@ -115,7 +115,9 @@ public class PackageListModel extends PFWModel {
 
 	private void setupAllPackages() {
 		PackageManager pm = mContext.getPackageManager();
-		mAllPackages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+		mAllPackages = pm.getInstalledPackages(
+				PackageManager.GET_UNINSTALLED_PACKAGES |
+				PackageManager.GET_DISABLED_COMPONENTS);
 
 		updated();
 	}
