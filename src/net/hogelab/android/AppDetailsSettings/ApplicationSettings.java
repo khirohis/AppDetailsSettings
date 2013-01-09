@@ -38,6 +38,7 @@ public class ApplicationSettings {
 		String key = String.format(Locale.JAPAN, KEY_LISTING_LABEL_COLOR_FORMAT, colorIndex);
 		return getSetting(key, DEFAULT_LISTING_LABLE_COLOR);
 	}
+
 	public static void setListingLabelColorSetting(int colorIndex, boolean value) {
 		String key = String.format(Locale.JAPAN, KEY_LISTING_LABEL_COLOR_FORMAT, colorIndex);
 		setSetting(key, value);

@@ -22,9 +22,9 @@ public abstract class PFWPresenter {
 	// public interfaces
 
 	public interface PFWPresentView {
-		public void onContentLoading(Object tag);
-		public void onContentLoaded(Object tag);
-		public void onContentLoadError(Object tag);
+		public void onContentLoading();
+		public void onContentLoaded();
+		public void onContentLoadError();
 	}
 
 
@@ -65,5 +65,5 @@ public abstract class PFWPresenter {
 	}
 
 
-	public abstract void loadContent(Object tag);
+	public abstract void loadContent();
 }

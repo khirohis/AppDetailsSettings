@@ -53,7 +53,6 @@ public class PackageListPresenter extends PFWPresenter
 	}
 
 
-
 	@Override
 	public void onViewCreate() {
 		Log.v(TAG, "onViewCreate");
@@ -91,7 +90,7 @@ public class PackageListPresenter extends PFWPresenter
 
 
 	@Override
-	public void loadContent(Object tag) {
+	public void loadContent() {
 		int hint = mPackageListModel.getUpdateHint();
 		if (hint == PFWModel.DATA_NONE_HINT) {
 			mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
@@ -99,7 +98,7 @@ public class PackageListPresenter extends PFWPresenter
 
 			mPackageListModelUpdateHint = hint;
 		} else {
-			// ‚Æ‚Á‚Ä‚«‚ÄƒZƒbƒg
+			// ã¨ã£ã¦ãã¦ã‚»ãƒƒãƒˆ
 		}
 	}
 
