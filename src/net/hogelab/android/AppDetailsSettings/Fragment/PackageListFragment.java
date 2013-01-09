@@ -38,8 +38,8 @@ public class PackageListFragment extends ListFragment
 
 
 	private PackageListPresenter mPresenter;
-	private String			currentListingApplicationType = null;
-	private int				currentListPosition = -1;
+	private String				mCurrentListingApplicationType = null;
+	private int					mCurrentListPosition = -1;
 
 
 	@Override
@@ -79,9 +79,9 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
-        mPresenter.loadContent(null);
+        mPresenter.loadContent();
 
-        currentListingApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
+        mCurrentListingApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
 
 		setListAdapter(getPackageListAdapter());
 		setListViewOnItemLongClickListener();
@@ -105,8 +105,8 @@ public class PackageListFragment extends ListFragment
 		super.onResume();
 
 		String setupApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
-		if (currentListingApplicationType != setupApplicationType) {
-			currentListingApplicationType = setupApplicationType;
+		if (mCurrentListingApplicationType != setupApplicationType) {
+			mCurrentListingApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());
 		}
 
@@ -182,11 +182,11 @@ public class PackageListFragment extends ListFragment
 		List<PackageInfo> list = null;
 
 		PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
-		if (currentListingApplicationType.equals("0")) {
+		if (mCurrentListingApplicationType.equals("0")) {
 			list = model.getSystemPackages();
-		} else if (currentListingApplicationType.equals("1")) {
+		} else if (mCurrentListingApplicationType.equals("1")) {
 			list = model.getDownloadedPackages();
-		} else if (currentListingApplicationType.equals("2")) {
+		} else if (mCurrentListingApplicationType.equals("2")) {
 			list = model.getAllPackages();
 		}
 
@@ -197,7 +197,7 @@ public class PackageListFragment extends ListFragment
 	private void setListViewOnItemLongClickListener() {
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
-				currentListPosition = position;
+				mCurrentListPosition = position;
 
 				LabelColorDialog dialog = LabelColorDialog.newInstance(PackageListFragment.this);
                 dialog.show(getFragmentManager(), "dialog");
@@ -210,32 +210,32 @@ public class PackageListFragment extends ListFragment
 
 	@Override
 	public void onClickLabelColorDialogList(int position) {
-		if (currentListPosition < 0 || currentListPosition >= getListAdapter().getCount()) {
+		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
 			return;
 		}
 
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(currentListPosition);
+		PackageInfo info = (PackageInfo)getListAdapter().getItem(mCurrentListPosition);
 		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
 		lmodel.setLabelColor(info.packageName, position);
 
 		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
 		adapter.notifyDataSetChanged();
 
-		currentListPosition = -1;
+		mCurrentListPosition = -1;
 	}
 
 
 	@Override
-	public void onContentLoading(Object tag) {
+	public void onContentLoading() {
 	}
 
 
 	@Override
-	public void onContentLoaded(Object tag) {
+	public void onContentLoaded() {
 	}
 
 
 	@Override
-	public void onContentLoadError(Object tag) {
+	public void onContentLoadError() {
 	}
 }
