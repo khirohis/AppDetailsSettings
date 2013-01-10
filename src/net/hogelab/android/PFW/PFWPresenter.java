@@ -12,10 +12,9 @@ public abstract class PFWPresenter {
 	private static final String TAG = PFWPresenter.class.getSimpleName();
 
 
-	protected Activity			mActivity;
-
-	protected PFWPresentView	mPresentView;
-	protected boolean			mPresentViewVisible;
+	protected Activity			mActivity = null;
+	protected PFWPresentView	mPresentView = null;
+	protected boolean			mPresentViewVisible = false;
 
 
 	//--------------------------------------------------
@@ -31,39 +30,42 @@ public abstract class PFWPresenter {
 	//--------------------------------------------------
 	// public functions
 
-	public PFWPresenter(Activity activity, PFWPresentView view) {
-		mActivity = activity;
+	public PFWPresenter() {
+	}
 
+
+	public synchronized void onViewCreate(Activity activity, PFWPresentView view) {
+		Log.v(TAG, "onViewCreate");
+
+		mActivity = activity;
 		mPresentView = view;
+
 		mPresentViewVisible = false;
 	}
 
 
-	public void onViewCreate() {
-		Log.v(TAG, "onViewCreate");
-	}
-
-
-	public void onViewShow() {
+	public synchronized void onViewShow() {
 		Log.v(TAG, "onViewShow");
 
 		mPresentViewVisible = true;
 	}
 
 
-	public void onViewHide() {
+	public synchronized void onViewHide() {
 		Log.v(TAG, "onViewHide");
 
 		mPresentViewVisible = false;
 	}
 
 
-	public void onViewDestroy() {
+	public synchronized void onViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
 
+		mActivity = null;
 		mPresentView = null;
 	}
 
 
 	public abstract void loadContent();
+	public abstract void forceLoadContent();
 }

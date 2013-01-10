@@ -25,7 +25,7 @@ public class ListSettingsFragment extends PreferenceFragment {
 
 
 	private ListPreference getListingApplicationTypePreference() {
-		CharSequence key = getText(R.string.listing_application_type_key);
+		CharSequence key = getText(R.string.packagelist_listing_type_key);
 		return (ListPreference)findPreference(key);
 	}
 
@@ -38,7 +38,7 @@ public class ListSettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		setListingApplicationTypeSummary(ApplicationSettings.getListingApplicationTypeSetting());
+		setListingApplicationTypeSummary(ApplicationSettings.getPackageListListingTypeSetting());
 	}
 
 	private void setListingApplicationTypeSummary(CharSequence value) {

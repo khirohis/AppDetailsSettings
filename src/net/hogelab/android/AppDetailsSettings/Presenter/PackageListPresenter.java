@@ -11,7 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
-import net.hogelab.android.AppDetailsSettings.ListRow.PackageListRow;
+import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
+import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.PFW.PFWPresenter;
 import net.hogelab.android.PFW.PFWModel;
@@ -22,16 +23,18 @@ import net.hogelab.android.PFW.PFWModel;
 
 public class PackageListPresenter extends PFWPresenter
 		implements PFWModel.PFWModelUpdateListener,
-			LoaderCallbacks<List<PackageListRow>> {
+			LoaderCallbacks<List<PackageInfoEntity>> {
 
 	private static final String TAG = PackageListPresenter.class.getSimpleName();
 
 	private static final int	PACKAGE_LIST_LOADER_ID = 1;
 
-	private PackageListModel	mPackageListModel;
-	private int					mPackageListModelUpdateHint = 0;
+	private ListSettingsModel	mListSettingsModel = null;
+	private boolean				mListSettingsModelChanged = false;
 
-	private Loader<List<PackageListRow>> mLoader = null;
+	private PackageListModel	mPackageListModel = null;
+
+	private Loader<List<PackageInfoEntity>> mLoader = null;
 
 
 	//--------------------------------------------------
@@ -44,90 +47,94 @@ public class PackageListPresenter extends PFWPresenter
 	//--------------------------------------------------
 	// public functions
 
-	public PackageListPresenter(Activity activity, PFWPresentView view) {
-		super(activity, view);
+	public PackageListPresenter() {
+		super();
+
+		mListSettingsModel = AppDetailsSettingsApplication.getApplication().getListSettingsModel();
+		mListSettingsModel.addListener(this);
+		mListSettingsModelChanged = true;
 
 		mPackageListModel = AppDetailsSettingsApplication.getApplication().getPackageListModel();
 		mPackageListModel.addListener(this);
-		mPackageListModelUpdateHint = mPackageListModel.getUpdateHint();
 	}
 
 
 	@Override
-	public void onViewCreate() {
+	public synchronized void onViewCreate(Activity activity, PFWPresentView view) {
 		Log.v(TAG, "onViewCreate");
-		super.onViewCreate();
+		super.onViewCreate(activity, view);
 	}
 
 
 	@Override
-	public void onViewShow() {
+	public synchronized void onViewShow() {
 		Log.v(TAG, "onViewShow");
 		super.onViewShow();
-
-		int hint = mPackageListModel.getUpdateHint();
-		if (hint != mPackageListModelUpdateHint) {
-			// update view
-			mPackageListModelUpdateHint = hint;
-		}
 	}
 
 
 	@Override
-	public void onViewHide() {
+	public synchronized void onViewHide() {
 		Log.v(TAG, "onViewHide");
 		super.onViewHide();
 	}
 
 
 	@Override
-	public void onViewDestroy() {
+	public synchronized void onViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
 		super.onViewDestroy();
-
-		mPresentView = null;
 	}
 
 
 	@Override
 	public void loadContent() {
-		int hint = mPackageListModel.getUpdateHint();
-		if (hint == PFWModel.DATA_NONE_HINT) {
+		// TODO: 色々手当て
+		if (mLoader == null) {
+	        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
 			mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
-			mLoader.forceLoad();
+		}
 
-			mPackageListModelUpdateHint = hint;
+		if (mListSettingsModelChanged) {
+			mLoader.forceLoad();
 		} else {
 			// とってきてセット
 		}
 	}
 
-
 	@Override
-	public void onModelUpdate(PFWModel model, int updateHint) {
+	public void forceLoadContent() {
 	}
 
 
 	@Override
-	public Loader<List<PackageListRow>> onCreateLoader(int id, Bundle args) {
+	public void onModelUpdate(PFWModel model, int updateHint) {
+		if (model instanceof ListSettingsModel) {
+			mListSettingsModelChanged = true;
+		}
+	}
+
+
+	@Override
+	public Loader<List<PackageInfoEntity>> onCreateLoader(int id, Bundle args) {
 		return new PackageListLoader(mActivity, mPackageListModel);
 	}
 
 
 	@Override
-	public void onLoadFinished(Loader<List<PackageListRow>> arg0, List<PackageListRow> arg1) {
+	public void onLoadFinished(Loader<List<PackageInfoEntity>> arg0, List<PackageInfoEntity> arg1) {
 	}
 
 
 	@Override
-	public void onLoaderReset(Loader<List<PackageListRow>> arg0) {
+	public void onLoaderReset(Loader<List<PackageInfoEntity>> arg0) {
 	}
 
 
 	//--------------------------------------------------
 	// private class
 
-	private static class PackageListLoader extends AsyncTaskLoader<List<PackageListRow>> {
+	private static class PackageListLoader extends AsyncTaskLoader<List<PackageInfoEntity>> {
 		private PackageListModel	mPackageListModel;
 
 		public PackageListLoader(Context context, PackageListModel model) {
@@ -137,7 +144,7 @@ public class PackageListPresenter extends PFWPresenter
 		}
 
 		@Override
-		public List<PackageListRow> loadInBackground() {
+		public List<PackageInfoEntity> loadInBackground() {
 			mPackageListModel.getAllPackages();
 			return null;
 		}
