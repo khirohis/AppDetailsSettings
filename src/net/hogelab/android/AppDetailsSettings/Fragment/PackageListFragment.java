@@ -57,9 +57,6 @@ public class PackageListFragment extends ListFragment
 		// to onCreateView
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-
-		mPresenter = new PackageListPresenter();
-		mPresenter.onViewCreate(getActivity(), this);
 	}
 
 
@@ -79,6 +76,8 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
+		mPresenter = new PackageListPresenter();
+		mPresenter.onViewCreate(getActivity(), this);
         mPresenter.loadContent();
 
         mCurrentListingApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
@@ -227,15 +226,18 @@ public class PackageListFragment extends ListFragment
 
 	@Override
 	public void onContentLoading() {
+		Log.v(TAG, "onContentLoading");
 	}
 
 
 	@Override
 	public void onContentLoaded() {
+		Log.v(TAG, "onContentLoaded");
 	}
 
 
 	@Override
 	public void onContentLoadError() {
+		Log.v(TAG, "onContentLoadError");
 	}
 }

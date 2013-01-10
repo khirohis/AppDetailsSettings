@@ -29,12 +29,13 @@ public class PackageListPresenter extends PFWPresenter
 
 	private static final int	PACKAGE_LIST_LOADER_ID = 1;
 
-	private ListSettingsModel	mListSettingsModel = null;
 	private boolean				mListSettingsModelChanged = false;
+	private ListSettingsModel	mListSettingsModel = null;
 
 	private PackageListModel	mPackageListModel = null;
 
 	private Loader<List<PackageInfoEntity>> mLoader = null;
+	private List<PackageInfoEntity> mPackageList = null;
 
 
 	//--------------------------------------------------
@@ -70,6 +71,10 @@ public class PackageListPresenter extends PFWPresenter
 	public synchronized void onViewShow() {
 		Log.v(TAG, "onViewShow");
 		super.onViewShow();
+
+		if (mListSettingsModelChanged) {
+			loadContent();
+		}
 	}
 
 
@@ -89,23 +94,24 @@ public class PackageListPresenter extends PFWPresenter
 
 	@Override
 	public void loadContent() {
-		// TODO: 色々手当て
-		if (mListSettingsModelChanged) {
-			if (mLoader != null) {
-		        mActivity.getLoaderManager().restartLoader(PACKAGE_LIST_LOADER_ID, null, this);
-			} else {
-		        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
-				mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
-			}
-
-			//mLoader.forceLoad();
-		} else {
-			// とってきてセット
+		if (mPackageList != null && !mListSettingsModelChanged) {
+			doContentLoaded();
 		}
+
+		if (mLoader != null) {
+	        mActivity.getLoaderManager().restartLoader(PACKAGE_LIST_LOADER_ID, null, this);
+		} else {
+	        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
+			mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
+		}
+
+		mLoader.forceLoad();
 	}
 
 	@Override
 	public void forceLoadContent() {
+		mPackageListModel.resetAllPackages();
+		loadContent();
 	}
 
 
@@ -119,17 +125,25 @@ public class PackageListPresenter extends PFWPresenter
 
 	@Override
 	public Loader<List<PackageInfoEntity>> onCreateLoader(int id, Bundle args) {
+		Log.v(TAG, "onCreateLoader");
 		return new PackageListLoader(mActivity);
 	}
 
 
 	@Override
-	public void onLoadFinished(Loader<List<PackageInfoEntity>> arg0, List<PackageInfoEntity> arg1) {
+	public void onLoadFinished(
+			Loader<List<PackageInfoEntity>> loader,
+			List<PackageInfoEntity> packages) {
+		Log.v(TAG, "onLoadFinished");
+
+		mPackageList = packages;
+		doContentLoaded();
 	}
 
 
 	@Override
-	public void onLoaderReset(Loader<List<PackageInfoEntity>> arg0) {
+	public void onLoaderReset(Loader<List<PackageInfoEntity>> loader) {
+		Log.v(TAG, "onLoaderReset");
 	}
 
 
@@ -143,11 +157,18 @@ public class PackageListPresenter extends PFWPresenter
 
 		@Override
 		public List<PackageInfoEntity> loadInBackground() {
-			return null;
+			PackageListModel packageListModel = AppDetailsSettingsApplication.getApplication().getPackageListModel();
+			List<PackageInfoEntity> packages = packageListModel.selectBothPackages();
+
+			return packages;
 		}
 	}
 
 
 	//--------------------------------------------------
 	// private functions
+
+	public void doContentLoaded() {
+		mPresentView.onContentLoaded();
+	}
 }

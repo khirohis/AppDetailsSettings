@@ -19,8 +19,8 @@ public class AppDetailsSettingsApplication extends Application {
 
 	private static AppDetailsSettingsApplication sSingleton = null;
 
-	private ListSettingsModel	listSettingsModel = null;
-	private PackageListModel	packageListModel = null;
+	private ListSettingsModel	mListSettingsModel = null;
+	private PackageListModel	mPackageListModel = null;
 
 
 	// TODO: deprecate
@@ -74,19 +74,19 @@ public class AppDetailsSettingsApplication extends Application {
 
 
 	public ListSettingsModel getListSettingsModel() {
-		if (listSettingsModel == null) {
-			listSettingsModel = new ListSettingsModel();
+		if (mListSettingsModel == null) {
+			mListSettingsModel = new ListSettingsModel();
 		}
 
-		return listSettingsModel;
+		return mListSettingsModel;
 	}
 
 	public PackageListModel getPackageListModel() {
-		if (packageListModel == null) {
-			packageListModel = new PackageListModel(this);
+		if (mPackageListModel == null) {
+			mPackageListModel = new PackageListModel(this);
 		}
 
-		return packageListModel;
+		return mPackageListModel;
 	}
 
 
