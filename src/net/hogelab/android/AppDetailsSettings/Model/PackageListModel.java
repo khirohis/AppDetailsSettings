@@ -36,7 +36,7 @@ public class PackageListModel extends PFWModel {
 	public PackageListModel(Context context) {
 		mContext = context;
 
-		mAllPackages = new ArrayList<PackageInfo>();
+		mAllPackages = null;
 
 		mDb = new LabelColorDatabase(mContext);
 
@@ -61,15 +61,43 @@ public class PackageListModel extends PFWModel {
 
 
 	public List<PackageInfoEntity> selectSystemPackages() {
-		return null;
+		List<PackageInfo> allPackages = getAllPackages();
+		List<PackageInfoEntity> packages = new ArrayList<PackageInfoEntity>();
+
+		for (PackageInfo info : allPackages) {
+			if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+				int colorIndex = getLabelColor(info.packageName);
+				packages.add(new PackageInfoEntity(info, colorIndex));
+			}
+		}
+
+		return packages;
 	}
 
 	public List<PackageInfoEntity> selectDownloadedPackages() {
-		return null;
+		List<PackageInfo> allPackages = getAllPackages();
+		List<PackageInfoEntity> packages = new ArrayList<PackageInfoEntity>();
+
+		for (PackageInfo info : allPackages) {
+			if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+				int colorIndex = getLabelColor(info.packageName);
+				packages.add(new PackageInfoEntity(info, colorIndex));
+			}
+		}
+
+		return packages;
 	}
 
 	public List<PackageInfoEntity> selectBothPackages() {
-		return null;
+		List<PackageInfo> allPackages = getAllPackages();
+		List<PackageInfoEntity> packages = new ArrayList<PackageInfoEntity>();
+
+		for (PackageInfo info : allPackages) {
+			int colorIndex = getLabelColor(info.packageName);
+			packages.add(new PackageInfoEntity(info, colorIndex));
+		}
+
+		return packages;
 	}
 
 
