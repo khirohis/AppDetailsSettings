@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.util.Log;
 import net.hogelab.android.AppDetailsSettings.R;
+import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.PFW.PFWModel;
 
 
@@ -44,19 +45,40 @@ public class PackageListModel extends PFWModel {
 	}
 
 
-	public void resetAllPackages() {
-		setupAllPackages();
-	}
+	public synchronized List<PackageInfo> getAllPackages() {
+		if (mAllPackages == null) {
+			mAllPackages = loadAllPackages();
 
+			updated();
+		}
 
-	public List<PackageInfo> getAllPackages() {
 		return mAllPackages;
 	}
 
+	public synchronized void resetAllPackages() {
+		mAllPackages = null;
+	}
+
+
+	public List<PackageInfoEntity> selectSystemPackages() {
+		return null;
+	}
+
+	public List<PackageInfoEntity> selectDownloadedPackages() {
+		return null;
+	}
+
+	public List<PackageInfoEntity> selectBothPackages() {
+		return null;
+	}
+
+
+	// TODO: depricate
 	public List<PackageInfo> getSystemPackages() {
+		List<PackageInfo> allPackages = getAllPackages();
 		List<PackageInfo> packages = new ArrayList<PackageInfo>();
 
-		for (PackageInfo info : mAllPackages) {
+		for (PackageInfo info : allPackages) {
 			if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
 				packages.add(info);
 			}
@@ -65,16 +87,25 @@ public class PackageListModel extends PFWModel {
 		return packages;
 	}
 
+	// TODO: deprecate
 	public List<PackageInfo> getDownloadedPackages() {
+		List<PackageInfo> allPackages = getAllPackages();
 		List<PackageInfo> packages = new ArrayList<PackageInfo>();
 
-		for (PackageInfo info : mAllPackages) {
+		for (PackageInfo info : allPackages) {
 			if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
 				packages.add(info);
 			}
 		}
 
 		return packages;
+	}
+
+	// TODO: deprecate
+	public List<PackageInfo> getBothPackages() {
+		List<PackageInfo> allPackages = getAllPackages();
+
+		return allPackages;
 	}
 
 
@@ -87,6 +118,7 @@ public class PackageListModel extends PFWModel {
 	}
 
 
+	// TODO: deprecate
 	public String getColorName(int index) {
 		if (index < 0 || index > mNames.length) {
 			return "";
@@ -96,6 +128,7 @@ public class PackageListModel extends PFWModel {
 	}
 
 
+	// TODO: deprecate
 	public int getColor(int index) {
 		return mColors.getColor(index, 0xFF000000);
 	}
@@ -113,12 +146,12 @@ public class PackageListModel extends PFWModel {
 	}
 
 
-	private void setupAllPackages() {
+	private List<PackageInfo> loadAllPackages() {
 		PackageManager pm = mContext.getPackageManager();
-		mAllPackages = pm.getInstalledPackages(
+		List<PackageInfo> packages = pm.getInstalledPackages(
 				PackageManager.GET_UNINSTALLED_PACKAGES |
 				PackageManager.GET_DISABLED_COMPONENTS);
 
-		updated();
+		return packages;
 	}
 }
