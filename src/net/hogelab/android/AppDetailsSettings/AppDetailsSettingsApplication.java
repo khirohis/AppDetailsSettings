@@ -100,6 +100,7 @@ public class AppDetailsSettingsApplication extends Application {
 		return packageModel;
 	}
 
+	// TODO: deprecate
 	public void shutdownPackageModel() {
 		if (packageModel != null) {
 			packageModel.shutdown();
@@ -108,6 +109,7 @@ public class AppDetailsSettingsApplication extends Application {
 	}
 
 
+	// TODO: deprecate
 	public LabelColorModel getLabelColorModel() {
 		if (labelColorModel == null) {
 			labelColorModel = new LabelColorModel(this);
@@ -116,6 +118,7 @@ public class AppDetailsSettingsApplication extends Application {
 		return labelColorModel;
 	}
 
+	// TODO: deprecate
 	public void shutdownLabelColorModel() {
 		if (labelColorModel != null) {
 			labelColorModel.shutdown();

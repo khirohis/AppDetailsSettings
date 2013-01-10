@@ -90,13 +90,15 @@ public class PackageListPresenter extends PFWPresenter
 	@Override
 	public void loadContent() {
 		// TODO: 色々手当て
-		if (mLoader == null) {
-	        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
-			mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
-		}
-
 		if (mListSettingsModelChanged) {
-			mLoader.forceLoad();
+			if (mLoader != null) {
+		        mActivity.getLoaderManager().restartLoader(PACKAGE_LIST_LOADER_ID, null, this);
+			} else {
+		        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
+				mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
+			}
+
+			//mLoader.forceLoad();
 		} else {
 			// とってきてセット
 		}
@@ -117,7 +119,7 @@ public class PackageListPresenter extends PFWPresenter
 
 	@Override
 	public Loader<List<PackageInfoEntity>> onCreateLoader(int id, Bundle args) {
-		return new PackageListLoader(mActivity, mPackageListModel);
+		return new PackageListLoader(mActivity);
 	}
 
 
@@ -135,17 +137,12 @@ public class PackageListPresenter extends PFWPresenter
 	// private class
 
 	private static class PackageListLoader extends AsyncTaskLoader<List<PackageInfoEntity>> {
-		private PackageListModel	mPackageListModel;
-
-		public PackageListLoader(Context context, PackageListModel model) {
+		public PackageListLoader(Context context) {
 			super(context);
-
-			mPackageListModel = model;
 		}
 
 		@Override
 		public List<PackageInfoEntity> loadInBackground() {
-			mPackageListModel.getAllPackages();
 			return null;
 		}
 	}
