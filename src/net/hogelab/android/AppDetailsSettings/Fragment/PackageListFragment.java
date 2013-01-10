@@ -58,8 +58,8 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		mPresenter = new PackageListPresenter(getActivity(), this);
-		mPresenter.onViewCreate();
+		mPresenter = new PackageListPresenter();
+		mPresenter.onViewCreate(getActivity(), this);
 	}
 
 
@@ -81,7 +81,7 @@ public class PackageListFragment extends ListFragment
 
         mPresenter.loadContent();
 
-        mCurrentListingApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
+        mCurrentListingApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
 
 		setListAdapter(getPackageListAdapter());
 		setListViewOnItemLongClickListener();
@@ -104,7 +104,7 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onResume");
 		super.onResume();
 
-		String setupApplicationType = ApplicationSettings.getListingApplicationTypeSetting();
+		String setupApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
 		if (mCurrentListingApplicationType != setupApplicationType) {
 			mCurrentListingApplicationType = setupApplicationType;
 	        setListAdapter(getPackageListAdapter());

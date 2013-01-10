@@ -14,9 +14,9 @@ public class PFWModel {
 
 	private static final String TAG = PFWModel.class.getSimpleName();
 
-	public static final int		DATA_NONE_HINT = 0;
+	public static final int		UPDATE_HINT_DATA_NONE = 0;
 
-	private int					mSerialNumber = DATA_NONE_HINT;
+	private int					mSerialNumber = UPDATE_HINT_DATA_NONE;
 	private List<PFWModelUpdateListener> mListeners;
 
 

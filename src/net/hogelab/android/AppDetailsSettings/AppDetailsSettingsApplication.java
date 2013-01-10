@@ -1,5 +1,6 @@
 package net.hogelab.android.AppDetailsSettings;
 
+import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
@@ -18,8 +19,12 @@ public class AppDetailsSettingsApplication extends Application {
 
 	private static AppDetailsSettingsApplication sSingleton = null;
 
-	private PackageModel		packageModel = null;
+	private ListSettingsModel	listSettingsModel = null;
 	private PackageListModel	packageListModel = null;
+
+
+	// TODO: deprecate
+	private PackageModel		packageModel = null;
 	private LabelColorModel		labelColorModel = null;
 
 
@@ -68,6 +73,14 @@ public class AppDetailsSettingsApplication extends Application {
 	}
 
 
+	public ListSettingsModel getListSettingsModel() {
+		if (listSettingsModel == null) {
+			listSettingsModel = new ListSettingsModel();
+		}
+
+		return listSettingsModel;
+	}
+
 	public PackageListModel getPackageListModel() {
 		if (packageListModel == null) {
 			packageListModel = new PackageListModel(this);
@@ -77,6 +90,8 @@ public class AppDetailsSettingsApplication extends Application {
 	}
 
 
+
+	// TODO: deprecate
 	public PackageModel getPackageModel() {
 		if (packageModel == null) {
 			packageModel = new PackageModel(this);
