@@ -4,11 +4,11 @@ import java.util.List;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.R;
+import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 //--------------------------------------------------
 // class PackageListAdapter
 
-public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
+public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = PackageListAdapter.class.getSimpleName();
@@ -34,7 +34,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 	//--------------------------------------------------
 	// public functions
 
-	public PackageListAdapter(Context context, List<PackageInfo> objects) {
+	public PackageListAdapter(Context context, List<PackageInfoEntity> objects) {
 		super(context, 0, objects);
 
 		mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,8 +53,8 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 			cell = (PackageInfoCell)convertView.getTag();
 		}
 
-		PackageInfo data= getItem(position);
-		cell.setInfo(getContext(), data);
+		PackageInfoEntity entity= getItem(position);
+		cell.setInfo(getContext(), entity);
 
 		return convertView;
 	}
@@ -66,7 +66,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 	private static class PackageInfoCell {
 
 		private View			mView = null;
-		private PackageInfo		mInfo = null;
+		private PackageInfoEntity mInfo = null;
 		private int				mLabelColor = 0;
 
 
@@ -75,13 +75,13 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 		}
 
 
-		public void setInfo(Context context, PackageInfo info) {
+		public void setInfo(Context context, PackageInfoEntity info) {
 			mInfo = info;
 
 			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor);
 			if (labelColor != null) {
 				LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-				mLabelColor = lmodel.getLabelColor(mInfo.packageName);
+				mLabelColor = lmodel.getLabelColor(mInfo.getInfo().packageName);
 				if (mLabelColor != 0) {
 					Drawable drawable = lmodel.getLabelColorDrawable(mLabelColor);
 					labelColor.setImageDrawable(drawable);
@@ -92,7 +92,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 			}
 
 			PackageManager pm = context.getPackageManager();
-			ApplicationInfo appInfo = mInfo.applicationInfo;
+			ApplicationInfo appInfo = mInfo.getApplicationInfo();
 
 			ImageView applicationIcon = (ImageView)mView.findViewById(R.id.application_icon);
 			if (applicationIcon != null) {
@@ -104,7 +104,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfo> {
 
 			TextView packageName = (TextView)mView.findViewById(R.id.package_name);
 			if (packageName != null) {
-				packageName.setText(mInfo.packageName);
+				packageName.setText(mInfo.getInfo().packageName);
 			}
 
 			TextView applicationLabel = (TextView)mView.findViewById(R.id.application_label);

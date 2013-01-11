@@ -5,15 +5,15 @@ import java.util.List;
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
+import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
 import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
-import net.hogelab.android.AppDetailsSettings.Model.PackageModel;
+import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.AppDetailsSettings.Presenter.PackageListPresenter;
 
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -165,9 +165,9 @@ public class PackageListFragment extends ListFragment
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(position);
+		PackageInfoEntity info = (PackageInfoEntity)getListAdapter().getItem(position);
 		if (info != null) {
-			Uri uri = Uri.parse("package:" + info.packageName);
+			Uri uri = Uri.parse("package:" + info.getInfo().packageName);
 			Intent intent = new Intent(APPLICATION_DETAILS_SETTINGS, uri);
 			startActivityForResult(intent, 0);
 		}
@@ -178,15 +178,15 @@ public class PackageListFragment extends ListFragment
 	// private functions
 
 	private PackageListAdapter getPackageListAdapter() {
-		List<PackageInfo> list = null;
+		List<PackageInfoEntity> list = null;
 
-		PackageModel model = AppDetailsSettingsApplication.getApplication().getPackageModel();
+		PackageListModel model = AppDetailsSettingsApplication.getApplication().getPackageListModel();
 		if (mCurrentListingApplicationType.equals("0")) {
-			list = model.getSystemPackages();
+			list = model.selectSystemPackages();
 		} else if (mCurrentListingApplicationType.equals("1")) {
-			list = model.getDownloadedPackages();
+			list = model.selectDownloadedPackages();
 		} else if (mCurrentListingApplicationType.equals("2")) {
-			list = model.getAllPackages();
+			list = model.selectBothPackages();
 		}
 
 		return new PackageListAdapter(getActivity(), list);
@@ -213,9 +213,9 @@ public class PackageListFragment extends ListFragment
 			return;
 		}
 
-		PackageInfo info = (PackageInfo)getListAdapter().getItem(mCurrentListPosition);
+		PackageInfoEntity info = (PackageInfoEntity)getListAdapter().getItem(mCurrentListPosition);
 		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-		lmodel.setLabelColor(info.packageName, position);
+		lmodel.setLabelColor(info.getInfo().packageName, position);
 
 		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
 		adapter.notifyDataSetChanged();
