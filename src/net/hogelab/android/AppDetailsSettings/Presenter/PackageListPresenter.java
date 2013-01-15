@@ -8,6 +8,7 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
@@ -109,7 +110,7 @@ public class PackageListPresenter extends PFWPresenter
 	}
 
 	@Override
-	public void forceLoadContent() {
+	public void reloadContent() {
 		mPackageListModel.resetAllPackages();
 		loadContent();
 	}
@@ -169,6 +170,18 @@ public class PackageListPresenter extends PFWPresenter
 	// private functions
 
 	public void doContentLoaded() {
-		mPresentView.onContentLoaded();
+		if (isViewVisible()) {
+			final PFWPresentView presentView = mPresentView;
+
+			if (presentView != null) {
+				Handler handler = new Handler(mActivity.getMainLooper());
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						mPresentView.onContentLoaded();
+					}
+				});
+			}
+		}
 	}
 }

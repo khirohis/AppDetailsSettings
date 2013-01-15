@@ -63,9 +63,17 @@ public abstract class PFWPresenter {
 
 		mActivity = null;
 		mPresentView = null;
+		mPresentViewVisible = false;
+	}
+
+
+	public boolean isViewVisible() {
+		return mPresentViewVisible;
 	}
 
 
 	public abstract void loadContent();
-	public abstract void forceLoadContent();
+	public abstract void reloadContent();
+	//public abstract boolean isLoadingContent();
+	//public abstract void cancelLoadingContent();
 }
