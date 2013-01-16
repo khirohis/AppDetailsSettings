@@ -90,6 +90,12 @@ public class PackageListPresenter extends PFWPresenter
 	public synchronized void onViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
 		super.onViewDestroy();
+
+		mListSettingsModel.removeListener(this);
+		mListSettingsModel = null;
+
+		mPackageListModel.removeListener(this);
+		mPackageListModel = null;
 	}
 
 
@@ -145,6 +151,11 @@ public class PackageListPresenter extends PFWPresenter
 	@Override
 	public void onLoaderReset(Loader<List<PackageInfoEntity>> loader) {
 		Log.v(TAG, "onLoaderReset");
+	}
+
+
+	public void setLabelColor(String packageName, int labelColor) {
+		mPackageListModel.setLabelColor(packageName, labelColor);
 	}
 
 
