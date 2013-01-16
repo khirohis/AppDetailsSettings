@@ -7,7 +7,6 @@ import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
 import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
-import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.AppDetailsSettings.Presenter.PackageListPresenter;
 
@@ -214,9 +213,9 @@ public class PackageListFragment extends ListFragment
 		}
 
 		PackageInfoEntity info = (PackageInfoEntity)getListAdapter().getItem(mCurrentListPosition);
-		LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-		lmodel.setLabelColor(info.getInfo().packageName, position);
+		mPresenter.setLabelColor(info.getInfo().packageName, position);
 
+		// 通知の前にデータの取り直しを？
 		PackageListAdapter adapter = (PackageListAdapter)getListAdapter();
 		adapter.notifyDataSetChanged();
 

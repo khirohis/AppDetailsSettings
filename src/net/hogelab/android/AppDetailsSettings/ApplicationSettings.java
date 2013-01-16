@@ -5,7 +5,9 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
 //--------------------------------------------------
@@ -13,7 +15,6 @@ import android.preference.PreferenceManager;
 
 public class ApplicationSettings {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = ApplicationSettings.class.getSimpleName();
 
 	private static final String	KEY_PACKAGELIST_LISTING_TYPE = "packagelist_listing_type_key";
@@ -22,9 +23,18 @@ public class ApplicationSettings {
 	private static final String KEY_LABELCOLOR_VISIBLE_KEY_FORMAT = "labelcolor_visible_%02d";
 	private static final boolean DEFAULT_LABLECOLOR_VISIBLE = true;
 
+	private static String[]		sNames;
+	private static TypedArray	sColors;
+
 
 	//--------------------------------------------------
 	// static functions
+
+	public static void initialize(Context context) {
+		sNames = context.getResources().getStringArray(R.array.labelcolor_color_names);
+		sColors = context.getResources().obtainTypedArray(R.array.labelcolor_colors);
+	}
+
 
 	public static String getPackageListListingTypeSetting() {
 		return getSetting(KEY_PACKAGELIST_LISTING_TYPE, DEFAULT_PACKAGELIST_LISTING_TYPE);
@@ -33,6 +43,7 @@ public class ApplicationSettings {
 	public static void setPackageListListingTypeSetting(String value) {
 		setSetting(KEY_PACKAGELIST_LISTING_TYPE, value);
 	}
+
 
 	public static boolean getLabelColorVisibleSetting(int colorIndex) {
 		String key = String.format(Locale.JAPAN, KEY_LABELCOLOR_VISIBLE_KEY_FORMAT, colorIndex);
@@ -44,6 +55,32 @@ public class ApplicationSettings {
 		setSetting(key, value);
 	}
 
+
+	public static String getColorName(int index) {
+		if (sNames == null) {
+			Log.d(TAG, "Not initialized");
+			return "";
+		} else if (index < 0 || index > sNames.length) {
+			return "";
+		}
+
+		return sNames[index];
+	}
+
+
+	public static int getColor(int index) {
+		if (sColors != null) {
+			return sColors.getColor(index, 0xFF000000);
+		}
+
+		Log.d(TAG, "Not initialized");
+
+		return 0xFF000000;
+	}
+
+
+	//--------------------------------------------------
+	// private static functions
 
 	private static String getSetting(String key, String defaultValue) {
 		Context context = AppDetailsSettingsApplication.getApplication();

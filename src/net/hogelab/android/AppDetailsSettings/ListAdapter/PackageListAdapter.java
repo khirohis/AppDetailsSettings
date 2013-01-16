@@ -2,10 +2,9 @@ package net.hogelab.android.AppDetailsSettings.ListAdapter;
 
 import java.util.List;
 
-import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
+import net.hogelab.android.AppDetailsSettings.ApplicationUtilities;
 import net.hogelab.android.AppDetailsSettings.R;
 import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
-import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -67,7 +66,6 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 
 		private View			mView = null;
 		private PackageInfoEntity mInfo = null;
-		private int				mLabelColor = 0;
 
 
 		public PackageInfoCell(View cellView) {
@@ -80,10 +78,9 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 
 			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor);
 			if (labelColor != null) {
-				LabelColorModel lmodel = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-				mLabelColor = lmodel.getLabelColor(mInfo.getInfo().packageName);
-				if (mLabelColor != 0) {
-					Drawable drawable = lmodel.getLabelColorDrawable(mLabelColor);
+				int color = mInfo.getColorIndex();
+				if (color != 0) {
+					Drawable drawable = ApplicationUtilities.getLabelColorDrawable(color);
 					labelColor.setImageDrawable(drawable);
 					drawable.setCallback(null);
 				} else {

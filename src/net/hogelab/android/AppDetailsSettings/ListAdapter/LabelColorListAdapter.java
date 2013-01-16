@@ -2,9 +2,9 @@ package net.hogelab.android.AppDetailsSettings.ListAdapter;
 
 import java.util.List;
 
-import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
+import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
+import net.hogelab.android.AppDetailsSettings.ApplicationUtilities;
 import net.hogelab.android.AppDetailsSettings.R;
-import net.hogelab.android.AppDetailsSettings.Model.LabelColorModel;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -73,11 +73,9 @@ public class LabelColorListAdapter extends ArrayAdapter<Integer> {
 		public void setInfo(Context context, int data) {
 			mData = data;
 
-			LabelColorModel model = AppDetailsSettingsApplication.getApplication().getLabelColorModel();
-
 			ImageView labelColor = (ImageView)mView.findViewById(R.id.labelcolor_sample);
 			if (labelColor != null) {
-				Drawable drawable = model.getLabelColorDrawable(mData);
+				Drawable drawable = ApplicationUtilities.getLabelColorDrawable(mData);
 				labelColor.setImageDrawable(drawable);
 				drawable.setCallback(null);
 				
@@ -85,7 +83,7 @@ public class LabelColorListAdapter extends ArrayAdapter<Integer> {
 
 			TextView labelColorName = (TextView)mView.findViewById(R.id.labelcolor_name);
 			if (labelColorName != null) {
-				String colorName = model.getColorName(mData);
+				String colorName = ApplicationSettings.getColorName(mData);
 				labelColorName.setText(colorName);
 			}
 		}
