@@ -76,8 +76,8 @@ public class PackageListFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
 		mPresenter = new PackageListPresenter();
-		mPresenter.onViewCreate(getActivity(), this);
-        mPresenter.loadContent();
+		mPresenter.onPresentViewCreate(getActivity(), this);
+        mPresenter.loadContent(null);
 
         mCurrentListingApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
 
@@ -108,7 +108,7 @@ public class PackageListFragment extends ListFragment
 	        setListAdapter(getPackageListAdapter());
 		}
 
-		mPresenter.onViewShow();
+		mPresenter.onPresentViewShow();
 	}
 
 
@@ -119,7 +119,7 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onPause");
 		super.onPause();
 
-		mPresenter.onViewHide();
+		mPresenter.onPresentViewHide();
 	}
 
 
@@ -148,7 +148,7 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onDestroy");
 		super.onDestroy();
 
-		mPresenter.onViewDestroy();
+		mPresenter.onPresentViewDestroy();
 		mPresenter = null;
 	}
 
@@ -224,19 +224,30 @@ public class PackageListFragment extends ListFragment
 
 
 	@Override
-	public void onContentLoading() {
-		Log.v(TAG, "onContentLoading");
+	public void onStartContentLoading(Object tag, int progressMax) {
+		Log.v(TAG, "onStartContentLoading:progressMax=" + Integer.toString(progressMax));
+	}
+
+	@Override
+	public void onProgressContentLoading(Object tag, int currentProgress) {
+		Log.v(TAG, "onProgressContentLoading:currentProgress=" + Integer.toString(currentProgress));
 	}
 
 
 	@Override
-	public void onContentLoaded() {
+	public void onContentLoaded(Object tag) {
 		Log.v(TAG, "onContentLoaded");
 	}
 
 
 	@Override
-	public void onContentLoadError() {
+	public void onContentLoadError(Object tag) {
 		Log.v(TAG, "onContentLoadError");
+	}
+
+
+	@Override
+	public void onContentUpdated(Object tag) {
+		Log.v(TAG, "onContentUpdated");
 	}
 }

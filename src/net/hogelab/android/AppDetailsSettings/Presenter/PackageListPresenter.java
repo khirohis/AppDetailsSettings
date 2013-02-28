@@ -23,7 +23,7 @@ import net.hogelab.android.PFW.PFWModel;
 // class PackageInfoModel
 
 public class PackageListPresenter extends PFWPresenter
-		implements PFWModel.PFWModelUpdateListener,
+		implements PFWModel.PFWModelListener,
 			LoaderCallbacks<List<PackageInfoEntity>> {
 
 	private static final String TAG = PackageListPresenter.class.getSimpleName();
@@ -62,34 +62,34 @@ public class PackageListPresenter extends PFWPresenter
 
 
 	@Override
-	public synchronized void onViewCreate(Activity activity, PFWPresentView view) {
+	public synchronized void onPresentViewCreate(Activity activity, PFWPresentView view) {
 		Log.v(TAG, "onViewCreate");
-		super.onViewCreate(activity, view);
+		super.onPresentViewCreate(activity, view);
 	}
 
 
 	@Override
-	public synchronized void onViewShow() {
+	public synchronized void onPresentViewShow() {
 		Log.v(TAG, "onViewShow");
-		super.onViewShow();
+		super.onPresentViewShow();
 
 		if (mListSettingsModelChanged) {
-			loadContent();
+			loadContent(null);
 		}
 	}
 
 
 	@Override
-	public synchronized void onViewHide() {
+	public synchronized void onPresentViewHide() {
 		Log.v(TAG, "onViewHide");
-		super.onViewHide();
+		super.onPresentViewHide();
 	}
 
 
 	@Override
-	public synchronized void onViewDestroy() {
+	public synchronized void onPresentViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
-		super.onViewDestroy();
+		super.onPresentViewDestroy();
 
 		mListSettingsModel.removeListener(this);
 		mListSettingsModel = null;
@@ -100,9 +100,9 @@ public class PackageListPresenter extends PFWPresenter
 
 
 	@Override
-	public void loadContent() {
+	public void loadContent(Object tag) {
 		if (mPackageList != null && !mListSettingsModelChanged) {
-			doContentLoaded();
+			doContentLoaded(null);
 		}
 
 		if (mLoader != null) {
@@ -116,9 +116,9 @@ public class PackageListPresenter extends PFWPresenter
 	}
 
 	@Override
-	public void reloadContent() {
+	public void reloadContent(Object tag) {
 		mPackageListModel.resetAllPackages();
-		loadContent();
+		loadContent(tag);
 	}
 
 
@@ -144,7 +144,7 @@ public class PackageListPresenter extends PFWPresenter
 		Log.v(TAG, "onLoadFinished");
 
 		mPackageList = packages;
-		doContentLoaded();
+		doContentLoaded(null);
 	}
 
 
@@ -180,16 +180,17 @@ public class PackageListPresenter extends PFWPresenter
 	//--------------------------------------------------
 	// private functions
 
-	public void doContentLoaded() {
+	public void doContentLoaded(Object tag) {
 		if (isViewVisible()) {
 			final PFWPresentView presentView = mPresentView;
+			final Object ftag = tag;
 
 			if (presentView != null) {
 				Handler handler = new Handler(mActivity.getMainLooper());
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						mPresentView.onContentLoaded();
+						mPresentView.onContentLoaded(ftag);
 					}
 				});
 			}

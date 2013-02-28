@@ -21,9 +21,13 @@ public abstract class PFWPresenter {
 	// public interfaces
 
 	public interface PFWPresentView {
-		public void onContentLoading();
-		public void onContentLoaded();
-		public void onContentLoadError();
+		public void onStartContentLoading(Object tag, int progressMax);
+		public void onProgressContentLoading(Object tag, int currentProgress);
+
+		public void onContentLoaded(Object tag);
+		public void onContentLoadError(Object tag);
+
+		public void onContentUpdated(Object tag);
 	}
 
 
@@ -34,7 +38,7 @@ public abstract class PFWPresenter {
 	}
 
 
-	public synchronized void onViewCreate(Activity activity, PFWPresentView view) {
+	public synchronized void onPresentViewCreate(Activity activity, PFWPresentView view) {
 		Log.v(TAG, "onViewCreate");
 
 		mActivity = activity;
@@ -44,21 +48,21 @@ public abstract class PFWPresenter {
 	}
 
 
-	public synchronized void onViewShow() {
+	public synchronized void onPresentViewShow() {
 		Log.v(TAG, "onViewShow");
 
 		mPresentViewVisible = true;
 	}
 
 
-	public synchronized void onViewHide() {
+	public synchronized void onPresentViewHide() {
 		Log.v(TAG, "onViewHide");
 
 		mPresentViewVisible = false;
 	}
 
 
-	public synchronized void onViewDestroy() {
+	public synchronized void onPresentViewDestroy() {
 		Log.v(TAG, "onViewDestroy");
 
 		mActivity = null;
@@ -72,8 +76,9 @@ public abstract class PFWPresenter {
 	}
 
 
-	public abstract void loadContent();
-	public abstract void reloadContent();
+	public abstract void loadContent(Object tag);
+	public abstract void reloadContent(Object tag);
+
 	//public abstract boolean isLoadingContent();
 	//public abstract void cancelLoadingContent();
 }
