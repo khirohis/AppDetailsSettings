@@ -17,13 +17,13 @@ public class PFWModel {
 	public static final int		UPDATE_HINT_DATA_NONE = 0;
 
 	private int					mSerialNumber = UPDATE_HINT_DATA_NONE;
-	private List<PFWModelUpdateListener> mListeners;
+	private List<PFWModelListener> mListeners;
 
 
 	//--------------------------------------------------
 	// public interfaces
 
-	public interface PFWModelUpdateListener {
+	public interface PFWModelListener {
 		public void onModelUpdate(PFWModel model, int updateHint);
 	}
 
@@ -32,7 +32,7 @@ public class PFWModel {
 	// public functions
 
 	public PFWModel() {
-		mListeners = new ArrayList<PFWModelUpdateListener>();
+		mListeners = new ArrayList<PFWModelListener>();
 	}
 
 
@@ -40,7 +40,7 @@ public class PFWModel {
 		return mListeners.size();
 	}
 
-	public synchronized void addListener(PFWModelUpdateListener listener) {
+	public synchronized void addListener(PFWModelListener listener) {
 		Log.v(TAG, "addListener");
 
 		if (!mListeners.contains(listener)) {
@@ -49,7 +49,7 @@ public class PFWModel {
 		}
 	}
 
-	public synchronized void removeListener(PFWModelUpdateListener listener) {
+	public synchronized void removeListener(PFWModelListener listener) {
 		Log.v(TAG, "removeListener");
 
 		if (mListeners.contains(listener)) {
@@ -65,7 +65,7 @@ public class PFWModel {
 	public synchronized void removeAllListener() {
 		Log.v(TAG, "removeAllListener");
 
-		mListeners = new ArrayList<PFWModelUpdateListener>();
+		mListeners = new ArrayList<PFWModelListener>();
 
 		onNoListener();
 	}
@@ -79,7 +79,7 @@ public class PFWModel {
 	//--------------------------------------------------
 	// protected functions
 
-	protected synchronized void updated() {
+	protected void updated() {
 		Log.v(TAG, "updated");
 
 		int updateHint;
@@ -93,12 +93,12 @@ public class PFWModel {
 	protected void notifyUpdate(int updateHint) {
 		Log.v(TAG, "notifyUpdate");
 
-		List<PFWModelUpdateListener> listenersCopy = new ArrayList<PFWModelUpdateListener>();
+		List<PFWModelListener> listenersCopy = new ArrayList<PFWModelListener>();
 		synchronized (this) {
 			listenersCopy.addAll(mListeners);
 		}
 
-		for (PFWModelUpdateListener listener : listenersCopy) {
+		for (PFWModelListener listener : listenersCopy) {
 			Log.v(TAG, "notify update to:" + listener.toString());
 			listener.onModelUpdate(this, updateHint);
 		}
