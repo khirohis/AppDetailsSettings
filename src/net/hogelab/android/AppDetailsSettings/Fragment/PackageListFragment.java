@@ -2,12 +2,10 @@ package net.hogelab.android.AppDetailsSettings.Fragment;
 
 import java.util.List;
 
-import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
 import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
-import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
 import net.hogelab.android.AppDetailsSettings.Presenter.PackageListPresenter;
 
 import android.app.Activity;
@@ -75,14 +73,13 @@ public class PackageListFragment extends ListFragment
 		Log.v(TAG, "onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
-		mPresenter = new PackageListPresenter();
-		mPresenter.onPresentViewCreate(getActivity(), this);
-        mPresenter.loadContent(null);
-
         mCurrentListingApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
 
-		setListAdapter(getPackageListAdapter());
 		setListViewOnItemLongClickListener();
+
+        mPresenter = new PackageListPresenter();
+		mPresenter.onPresentViewCreate(getActivity(), this);
+        mPresenter.loadContent(null);
     }
 
 
@@ -101,12 +98,6 @@ public class PackageListFragment extends ListFragment
 		// to Fragment is active
 		Log.v(TAG, "onResume");
 		super.onResume();
-
-		String setupApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
-		if (mCurrentListingApplicationType != setupApplicationType) {
-			mCurrentListingApplicationType = setupApplicationType;
-	        setListAdapter(getPackageListAdapter());
-		}
 
 		mPresenter.onPresentViewShow();
 	}
@@ -173,39 +164,6 @@ public class PackageListFragment extends ListFragment
     }
 
 
-	//--------------------------------------------------
-	// private functions
-
-	private PackageListAdapter getPackageListAdapter() {
-		List<PackageInfoEntity> list = null;
-
-		PackageListModel model = AppDetailsSettingsApplication.getApplication().getPackageListModel();
-		if (mCurrentListingApplicationType.equals("0")) {
-			list = model.selectSystemPackages();
-		} else if (mCurrentListingApplicationType.equals("1")) {
-			list = model.selectDownloadedPackages();
-		} else if (mCurrentListingApplicationType.equals("2")) {
-			list = model.selectBothPackages();
-		}
-
-		return new PackageListAdapter(getActivity(), list);
-	}
-
-
-	private void setListViewOnItemLongClickListener() {
-		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
-				mCurrentListPosition = position;
-
-				LabelColorDialog dialog = LabelColorDialog.newInstance(PackageListFragment.this);
-                dialog.show(getFragmentManager(), "dialog");
-
-                return true;
-			}
-		});
-	}
-
-
 	@Override
 	public void onClickLabelColorDialogList(int position) {
 		if (mCurrentListPosition < 0 || mCurrentListPosition >= getListAdapter().getCount()) {
@@ -237,6 +195,9 @@ public class PackageListFragment extends ListFragment
 	@Override
 	public void onContentLoaded(Object tag, Object content) {
 		Log.v(TAG, "onContentLoaded");
+
+		PackageListAdapter adapter = new PackageListAdapter(getActivity(), contentToList(content));
+		setListAdapter(adapter);
 	}
 
 
@@ -249,5 +210,34 @@ public class PackageListFragment extends ListFragment
 	@Override
 	public void onContentUpdated(Object tag) {
 		Log.v(TAG, "onContentUpdated");
+
+		String setupApplicationType = ApplicationSettings.getPackageListListingTypeSetting();
+		if (mCurrentListingApplicationType != setupApplicationType) {
+			mCurrentListingApplicationType = setupApplicationType;
+	        mPresenter.loadContent(null);
+		}
+	}
+
+
+	//--------------------------------------------------
+	// private functions
+
+	private void setListViewOnItemLongClickListener() {
+		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id) {
+				mCurrentListPosition = position;
+
+				LabelColorDialog dialog = LabelColorDialog.newInstance(PackageListFragment.this);
+                dialog.show(getFragmentManager(), "dialog");
+
+                return true;
+			}
+		});
+	}
+
+
+	@SuppressWarnings("unchecked")
+	private List<PackageInfoEntity> contentToList(Object content) {
+		return (List<PackageInfoEntity>)content;
 	}
 }

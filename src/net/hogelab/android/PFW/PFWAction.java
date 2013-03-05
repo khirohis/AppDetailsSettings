@@ -58,6 +58,11 @@ public abstract class PFWAction implements Runnable {
 	}
 
 
+	public static void executeAction(PFWAction action) {
+		mHandler.post(action);
+	}
+
+
 	//--------------------------------------------------
 	// public functions
 
