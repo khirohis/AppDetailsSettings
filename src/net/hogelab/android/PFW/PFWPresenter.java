@@ -1,6 +1,7 @@
 package net.hogelab.android.PFW;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.util.Log;
 
 
@@ -11,7 +12,6 @@ public abstract class PFWPresenter {
 
 	private static final String TAG = PFWPresenter.class.getSimpleName();
 
-
 	protected Activity			mActivity = null;
 	protected PFWPresentView	mPresentView = null;
 	protected boolean			mPresentViewVisible = false;
@@ -21,11 +21,11 @@ public abstract class PFWPresenter {
 	// public interfaces
 
 	public interface PFWPresentView {
-		public void onStartContentLoading(Object tag, int progressMax);
-		public void onProgressContentLoading(Object tag, int currentProgress);
+		public void onContentLoadingStart(Object tag, int progressMax);
+		public void onContentLoadingProgress(Object tag, int currentProgress);
 
-		public void onContentLoaded(Object tag);
-		public void onContentLoadError(Object tag);
+		public void onContentLoaded(Object tag, Object content);
+		public void onContentLoadError(Object tag, Object error);
 
 		public void onContentUpdated(Object tag);
 	}
@@ -71,7 +71,7 @@ public abstract class PFWPresenter {
 	}
 
 
-	public boolean isViewVisible() {
+	public synchronized boolean isViewVisible() {
 		return mPresentViewVisible;
 	}
 
@@ -81,4 +81,89 @@ public abstract class PFWPresenter {
 
 	//public abstract boolean isLoadingContent();
 	//public abstract void cancelLoadingContent();
+
+
+	//--------------------------------------------------
+	// protected functions
+
+	protected synchronized void doContentLoadingStart(Object tag, int progressMax) {
+		if (mActivity != null && mPresentView != null) {
+			final PFWPresentView fpv = mPresentView;
+			final Object ft = tag;
+			final int fpm = progressMax;
+
+			Handler handler = new Handler(mActivity.getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					fpv.onContentLoadingStart(ft, fpm);
+				}
+			});
+		}
+	}
+
+	protected synchronized void doContentLoadingProgress(Object tag, int currentProgress) {
+		if (mActivity != null && mPresentView != null) {
+			final PFWPresentView fpv = mPresentView;
+			final Object ft = tag;
+			final int fcp = currentProgress;
+
+			Handler handler = new Handler(mActivity.getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					fpv.onContentLoadingProgress(ft, fcp);
+				}
+			});
+		}
+	}
+
+
+	protected synchronized void doContentLoaded(Object tag, Object content) {
+		if (mActivity != null && mPresentView != null) {
+			final PFWPresentView fpv = mPresentView;
+			final Object ft = tag;
+			final Object fc = content;
+
+			Handler handler = new Handler(mActivity.getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					fpv.onContentLoaded(ft, fc);
+				}
+			});
+		}
+	}
+
+	protected synchronized void doContentLoadError(Object tag, Object error) {
+		if (mActivity != null && mPresentView != null) {
+			final PFWPresentView fpv = mPresentView;
+			final Object ft = tag;
+			final Object fe = error;
+
+			Handler handler = new Handler(mActivity.getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					fpv.onContentLoadError(ft, fe);
+				}
+			});
+		}
+	}
+
+
+	protected synchronized void doContentUpdated(Object tag) {
+		if (mActivity != null && mPresentView != null) {
+			final PFWPresentView fpv = mPresentView;
+			final Object ft = tag;
+
+			Handler handler = new Handler(mActivity.getMainLooper());
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					fpv.onContentUpdated(ft);
+				}
+			});
+		}
+	}
 }

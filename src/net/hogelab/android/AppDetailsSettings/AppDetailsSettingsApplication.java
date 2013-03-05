@@ -2,7 +2,7 @@ package net.hogelab.android.AppDetailsSettings;
 
 import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
-import net.hogelab.android.PFW.PFWAction;
+import net.hogelab.android.PFW.PFW;
 
 import android.app.Application;
 import android.content.res.Configuration;
@@ -42,7 +42,7 @@ public class AppDetailsSettingsApplication extends Application {
 		}
 
 		ApplicationSettings.initialize(this);
-		PFWAction.initialize(this);
+		PFW.initialize(this);
 	}
  
 
@@ -58,10 +58,12 @@ public class AppDetailsSettingsApplication extends Application {
 	}
 
 
+	/* API level 14
 	@Override
 	public void onTrimMemory(int level) {
 		Log.v(TAG, "onTrimMemory:level=" + level);
 	}
+	*/
 
 
 	@Override

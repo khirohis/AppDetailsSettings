@@ -13,7 +13,7 @@ public abstract class PFWAction implements Runnable {
 
 	private static final String TAG = PFWAction.class.getSimpleName();
 
-	private static final String	THREAD_QUEUE_NAME = PFWAction.class.getSimpleName() + "HandlerThreadQueue";
+	private static final String	THREAD_QUEUE_NAME = PFWAction.class.getSimpleName() + "_HandlerThreadQueue";
 
 	private static HandlerThread mHandlerThread = null;
 	private static Handler		mHandler = null;
@@ -52,8 +52,9 @@ public abstract class PFWAction implements Runnable {
 
 	public static void initialize(Context context) {
 		mHandlerThread = new HandlerThread(THREAD_QUEUE_NAME);
-		mHandler = new Handler(mHandlerThread.getLooper());
 		mHandlerThread.start();
+
+		mHandler = new Handler(mHandlerThread.getLooper());
 	}
 
 

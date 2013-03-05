@@ -3,11 +3,6 @@ package net.hogelab.android.AppDetailsSettings.Presenter;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.AsyncTaskLoader;
-import android.content.Context;
-import android.content.Loader;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
@@ -23,19 +18,16 @@ import net.hogelab.android.PFW.PFWModel;
 // class PackageInfoModel
 
 public class PackageListPresenter extends PFWPresenter
-		implements PFWModel.PFWModelListener,
-			LoaderCallbacks<List<PackageInfoEntity>> {
+		implements PFWModel.PFWModelListener {
 
 	private static final String TAG = PackageListPresenter.class.getSimpleName();
-
-	private static final int	PACKAGE_LIST_LOADER_ID = 1;
 
 	private boolean				mListSettingsModelChanged = false;
 	private ListSettingsModel	mListSettingsModel = null;
 
+	private boolean				mPackageListModelChanged = false;
 	private PackageListModel	mPackageListModel = null;
 
-	private Loader<List<PackageInfoEntity>> mLoader = null;
 	private List<PackageInfoEntity> mPackageList = null;
 
 
@@ -58,6 +50,7 @@ public class PackageListPresenter extends PFWPresenter
 
 		mPackageListModel = AppDetailsSettingsApplication.getApplication().getPackageListModel();
 		mPackageListModel.addListener(this);
+		mPackageListModelChanged = true;
 	}
 
 
@@ -72,10 +65,6 @@ public class PackageListPresenter extends PFWPresenter
 	public synchronized void onPresentViewShow() {
 		Log.v(TAG, "onViewShow");
 		super.onPresentViewShow();
-
-		if (mListSettingsModelChanged) {
-			loadContent(null);
-		}
 	}
 
 
@@ -101,10 +90,11 @@ public class PackageListPresenter extends PFWPresenter
 
 	@Override
 	public void loadContent(Object tag) {
-		if (mPackageList != null && !mListSettingsModelChanged) {
-			doContentLoaded(null);
+		if (mListSettingsModelChanged || mPackageListModelChanged) {
+			// execute action
 		}
 
+		/*
 		if (mLoader != null) {
 	        mActivity.getLoaderManager().restartLoader(PACKAGE_LIST_LOADER_ID, null, this);
 		} else {
@@ -113,6 +103,7 @@ public class PackageListPresenter extends PFWPresenter
 		}
 
 		mLoader.forceLoad();
+		*/
 	}
 
 	@Override
@@ -126,10 +117,13 @@ public class PackageListPresenter extends PFWPresenter
 	public void onModelUpdate(PFWModel model, int updateHint) {
 		if (model instanceof ListSettingsModel) {
 			mListSettingsModelChanged = true;
+
+			doContentUpdated(null);
 		}
 	}
 
 
+	/*
 	@Override
 	public Loader<List<PackageInfoEntity>> onCreateLoader(int id, Bundle args) {
 		Log.v(TAG, "onCreateLoader");
@@ -152,6 +146,7 @@ public class PackageListPresenter extends PFWPresenter
 	public void onLoaderReset(Loader<List<PackageInfoEntity>> loader) {
 		Log.v(TAG, "onLoaderReset");
 	}
+	*/
 
 
 	public void setLabelColor(String packageName, int labelColor) {
@@ -160,27 +155,9 @@ public class PackageListPresenter extends PFWPresenter
 
 
 	//--------------------------------------------------
-	// private class
-
-	private static class PackageListLoader extends AsyncTaskLoader<List<PackageInfoEntity>> {
-		public PackageListLoader(Context context) {
-			super(context);
-		}
-
-		@Override
-		public List<PackageInfoEntity> loadInBackground() {
-			PackageListModel packageListModel = AppDetailsSettingsApplication.getApplication().getPackageListModel();
-			List<PackageInfoEntity> packages = packageListModel.selectBothPackages();
-
-			return packages;
-		}
-	}
-
-
-	//--------------------------------------------------
 	// private functions
 
-	public void doContentLoaded(Object tag) {
+	private void doContentLoaded(Object tag) {
 		if (isViewVisible()) {
 			final PFWPresentView presentView = mPresentView;
 			final Object ftag = tag;
@@ -190,7 +167,7 @@ public class PackageListPresenter extends PFWPresenter
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
-						mPresentView.onContentLoaded(ftag);
+						mPresentView.onContentLoaded(ftag, null);
 					}
 				});
 			}
