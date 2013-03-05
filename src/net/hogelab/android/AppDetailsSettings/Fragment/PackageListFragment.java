@@ -25,7 +25,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 
 //--------------------------------------------------
-// class MainActivity
+// class PackageListFragment
 
 public class PackageListFragment extends ListFragment
 		implements LabelColorDialog.LabelColorDialogOnClickListener,
@@ -224,24 +224,24 @@ public class PackageListFragment extends ListFragment
 
 
 	@Override
-	public void onStartContentLoading(Object tag, int progressMax) {
+	public void onContentLoadingStart(Object tag, int progressMax) {
 		Log.v(TAG, "onStartContentLoading:progressMax=" + Integer.toString(progressMax));
 	}
 
 	@Override
-	public void onProgressContentLoading(Object tag, int currentProgress) {
+	public void onContentLoadingProgress(Object tag, int currentProgress) {
 		Log.v(TAG, "onProgressContentLoading:currentProgress=" + Integer.toString(currentProgress));
 	}
 
 
 	@Override
-	public void onContentLoaded(Object tag) {
+	public void onContentLoaded(Object tag, Object content) {
 		Log.v(TAG, "onContentLoaded");
 	}
 
 
 	@Override
-	public void onContentLoadError(Object tag) {
+	public void onContentLoadError(Object tag, Object error) {
 		Log.v(TAG, "onContentLoadError");
 	}
 
