@@ -3,13 +3,16 @@ package net.hogelab.android.AppDetailsSettings.Presenter;
 import java.util.List;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.util.Log;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
+import net.hogelab.android.AppDetailsSettings.Presenter.Action.LoadPackageListAction;
+import net.hogelab.android.PFW.PFWAction.PFWActionListener;
+import net.hogelab.android.PFW.PFWAction.Status;
+import net.hogelab.android.PFW.PFWAction;
 import net.hogelab.android.PFW.PFWPresenter;
 import net.hogelab.android.PFW.PFWModel;
 
@@ -90,21 +93,14 @@ public class PackageListPresenter extends PFWPresenter
 
 	@Override
 	public void loadContent(Object tag) {
-		if (mListSettingsModelChanged || mPackageListModelChanged) {
-			// execute action
-		}
-
-		/*
-		if (mLoader != null) {
-	        mActivity.getLoaderManager().restartLoader(PACKAGE_LIST_LOADER_ID, null, this);
+		if (mPackageList == null || mListSettingsModelChanged || mPackageListModelChanged) {
+			LoadPackageListAction action = new LoadPackageListAction(createLoadPackageListActionListener(), tag);
+			PFWAction.executeAction(action);
 		} else {
-	        mActivity.getLoaderManager().initLoader(PACKAGE_LIST_LOADER_ID, null, this);
-			mLoader = mActivity.getLoaderManager().getLoader(PACKAGE_LIST_LOADER_ID);
+			doContentLoaded(tag, mPackageList);
 		}
-
-		mLoader.forceLoad();
-		*/
 	}
+
 
 	@Override
 	public void reloadContent(Object tag) {
@@ -123,32 +119,6 @@ public class PackageListPresenter extends PFWPresenter
 	}
 
 
-	/*
-	@Override
-	public Loader<List<PackageInfoEntity>> onCreateLoader(int id, Bundle args) {
-		Log.v(TAG, "onCreateLoader");
-		return new PackageListLoader(mActivity);
-	}
-
-
-	@Override
-	public void onLoadFinished(
-			Loader<List<PackageInfoEntity>> loader,
-			List<PackageInfoEntity> packages) {
-		Log.v(TAG, "onLoadFinished");
-
-		mPackageList = packages;
-		doContentLoaded(null);
-	}
-
-
-	@Override
-	public void onLoaderReset(Loader<List<PackageInfoEntity>> loader) {
-		Log.v(TAG, "onLoaderReset");
-	}
-	*/
-
-
 	public void setLabelColor(String packageName, int labelColor) {
 		mPackageListModel.setLabelColor(packageName, labelColor);
 	}
@@ -157,20 +127,29 @@ public class PackageListPresenter extends PFWPresenter
 	//--------------------------------------------------
 	// private functions
 
-	private void doContentLoaded(Object tag) {
-		if (isViewVisible()) {
-			final PFWPresentView presentView = mPresentView;
-			final Object ftag = tag;
+	private PFWActionListener createLoadPackageListActionListener() {
+		return new PFWActionListener() {
 
-			if (presentView != null) {
-				Handler handler = new Handler(mActivity.getMainLooper());
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						mPresentView.onContentLoaded(ftag, null);
-					}
-				});
+			@Override
+			public void onActionStart(Object tag, int progressMax) {
+				Log.d(TAG, "onActionStart");
 			}
-		}
+
+			@Override
+			public void onActionProgress(Object tag, int currentProgress) {
+				Log.d(TAG, "onActionProgress");
+			}
+
+			@Override
+			public void onActionComplete(Object tag, Status status, Object result) {
+				Log.d(TAG, "onActionComplete");
+
+				if (status.equals(Status.SUCCESS) && result != null) {
+					doContentLoaded(tag, result);
+				} else {
+					doContentLoadError(tag, null);
+				}
+			}
+		};
 	}
 }

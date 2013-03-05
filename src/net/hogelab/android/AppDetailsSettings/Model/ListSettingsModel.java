@@ -1,6 +1,13 @@
 package net.hogelab.android.AppDetailsSettings.Model;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
+import net.hogelab.android.AppDetailsSettings.R;
 import net.hogelab.android.PFW.PFWModel;
 
 
@@ -17,6 +24,14 @@ public class ListSettingsModel extends PFWModel {
 	// public functions
 
 	public ListSettingsModel() {
+		/*
+		OnSharedPreferenceChangeListener changeListener = new OnSharedPreferenceChangeListener() {
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			}
+		};
+		registerOnSharedPreferenceChangeListener(changeListener);
+		*/
 	}
 
 
@@ -40,4 +55,8 @@ public class ListSettingsModel extends PFWModel {
 
 		updated();
 	}
+
+
+	//--------------------------------------------------
+	// private functions
 }
