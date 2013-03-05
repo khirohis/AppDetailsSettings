@@ -1,7 +1,9 @@
 package net.hogelab.android.AppDetailsSettings.Fragment;
 
+import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
 import net.hogelab.android.AppDetailsSettings.R;
 import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
+import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -34,6 +36,10 @@ public class ListSettingsFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object value) {
 				setListingApplicationTypeSummary((CharSequence)value);
+
+				ListSettingsModel lsm = AppDetailsSettingsApplication.getApplication().getListSettingsModel();
+				lsm.onPackageListListingTypeChange();
+
 				return true;
 			}
 		});
