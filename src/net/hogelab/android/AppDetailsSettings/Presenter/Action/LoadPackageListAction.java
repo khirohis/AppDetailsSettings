@@ -3,9 +3,9 @@ package net.hogelab.android.AppDetailsSettings.Presenter.Action;
 import java.util.List;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
-import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
+import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 import net.hogelab.android.PFW.PFWAction;
 
 

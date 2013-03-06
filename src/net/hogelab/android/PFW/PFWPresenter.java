@@ -1,5 +1,8 @@
 package net.hogelab.android.PFW;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +18,8 @@ public abstract class PFWPresenter {
 	protected Activity			mActivity = null;
 	protected PFWPresentView	mPresentView = null;
 	protected boolean			mPresentViewVisible = false;
+
+	protected Map<String, PFWAction> mRunningAction = null;
 
 
 	//--------------------------------------------------
@@ -35,6 +40,7 @@ public abstract class PFWPresenter {
 	// public functions
 
 	public PFWPresenter() {
+		mRunningAction = new HashMap<String, PFWAction>();
 	}
 
 
@@ -86,9 +92,8 @@ public abstract class PFWPresenter {
 	//--------------------------------------------------
 	// protected functions
 
-	protected synchronized void doContentLoadingStart(Object tag, int progressMax) {
+	protected synchronized void postContentLoadingStart(Object tag, int progressMax) {
 		if (mActivity != null && mPresentView != null) {
-			final PFWPresentView fpv = mPresentView;
 			final Object ft = tag;
 			final int fpm = progressMax;
 
@@ -96,13 +101,20 @@ public abstract class PFWPresenter {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					fpv.onContentLoadingStart(ft, fpm);
+					onContentLoadingStart(ft, fpm);
 				}
 			});
 		}
 	}
 
-	protected synchronized void doContentLoadingProgress(Object tag, int currentProgress) {
+	protected synchronized void onContentLoadingStart(Object tag, int progressMax) {
+		if (mActivity != null && mPresentView != null) {
+			mPresentView.onContentLoadingStart(tag, progressMax);
+		}
+	}
+
+
+	protected synchronized void postContentLoadingProgress(Object tag, int currentProgress) {
 		if (mActivity != null && mPresentView != null) {
 			final PFWPresentView fpv = mPresentView;
 			final Object ft = tag;
@@ -119,7 +131,7 @@ public abstract class PFWPresenter {
 	}
 
 
-	protected synchronized void doContentLoaded(Object tag, Object content) {
+	protected synchronized void postContentLoaded(Object tag, Object content) {
 		if (mActivity != null && mPresentView != null) {
 			final PFWPresentView fpv = mPresentView;
 			final Object ft = tag;
@@ -135,7 +147,7 @@ public abstract class PFWPresenter {
 		}
 	}
 
-	protected synchronized void doContentLoadError(Object tag, Object error) {
+	protected synchronized void postContentLoadError(Object tag, Object error) {
 		if (mActivity != null && mPresentView != null) {
 			final PFWPresentView fpv = mPresentView;
 			final Object ft = tag;
@@ -152,7 +164,7 @@ public abstract class PFWPresenter {
 	}
 
 
-	protected synchronized void doContentUpdated(Object tag) {
+	protected synchronized void postContentUpdated(Object tag) {
 		if (mActivity != null && mPresentView != null) {
 			final PFWPresentView fpv = mPresentView;
 			final Object ft = tag;
