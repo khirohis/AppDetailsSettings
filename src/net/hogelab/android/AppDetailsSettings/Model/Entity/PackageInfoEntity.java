@@ -1,4 +1,4 @@
-package net.hogelab.android.AppDetailsSettings.Entity;
+package net.hogelab.android.AppDetailsSettings.Model.Entity;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;

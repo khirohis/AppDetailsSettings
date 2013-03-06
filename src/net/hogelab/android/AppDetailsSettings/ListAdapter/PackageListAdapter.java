@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.hogelab.android.AppDetailsSettings.ApplicationUtilities;
 import net.hogelab.android.AppDetailsSettings.R;
-import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
+import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

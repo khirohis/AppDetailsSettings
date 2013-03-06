@@ -6,9 +6,9 @@ import android.app.Activity;
 import android.util.Log;
 
 import net.hogelab.android.AppDetailsSettings.AppDetailsSettingsApplication;
-import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Model.ListSettingsModel;
 import net.hogelab.android.AppDetailsSettings.Model.PackageListModel;
+import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Presenter.Action.LoadPackageListAction;
 import net.hogelab.android.PFW.PFWAction.PFWActionListener;
 import net.hogelab.android.PFW.PFWAction.Status;
@@ -97,7 +97,7 @@ public class PackageListPresenter extends PFWPresenter
 			LoadPackageListAction action = new LoadPackageListAction(createLoadPackageListActionListener(), tag);
 			PFWAction.executeAction(action);
 		} else {
-			doContentLoaded(tag, mPackageList);
+			postContentLoaded(tag, mPackageList);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class PackageListPresenter extends PFWPresenter
 		if (model instanceof ListSettingsModel) {
 			mListSettingsModelChanged = true;
 
-			doContentUpdated(null);
+			postContentUpdated(null);
 		}
 	}
 
@@ -145,9 +145,9 @@ public class PackageListPresenter extends PFWPresenter
 				Log.d(TAG, "onActionComplete");
 
 				if (status.equals(Status.SUCCESS) && result != null) {
-					doContentLoaded(tag, result);
+					postContentLoaded(tag, result);
 				} else {
-					doContentLoadError(tag, null);
+					postContentLoadError(tag, null);
 				}
 			}
 		};

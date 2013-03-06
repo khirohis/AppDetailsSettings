@@ -8,7 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
+import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 import net.hogelab.android.PFW.PFWModel;
 
 

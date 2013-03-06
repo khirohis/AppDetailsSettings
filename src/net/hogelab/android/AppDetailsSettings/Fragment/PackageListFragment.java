@@ -4,8 +4,8 @@ import java.util.List;
 
 import net.hogelab.android.AppDetailsSettings.ApplicationSettings;
 import net.hogelab.android.AppDetailsSettings.Dialog.LabelColorDialog;
-import net.hogelab.android.AppDetailsSettings.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.ListAdapter.PackageListAdapter;
+import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Presenter.PackageListPresenter;
 
 import android.app.Activity;
