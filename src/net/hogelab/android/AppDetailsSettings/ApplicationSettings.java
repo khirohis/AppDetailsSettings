@@ -24,7 +24,7 @@ public class ApplicationSettings {
 	private static final boolean DEFAULT_LABLECOLOR_VISIBLE = true;
 
 	private static String[]		sNames;
-	private static TypedArray	sColors;
+	private static int[]		sColors;
 
 
 	//--------------------------------------------------
@@ -32,7 +32,15 @@ public class ApplicationSettings {
 
 	public static void initialize(Context context) {
 		sNames = context.getResources().getStringArray(R.array.labelcolor_color_names);
-		sColors = context.getResources().obtainTypedArray(R.array.labelcolor_colors);
+
+		TypedArray colors = context.getResources().obtainTypedArray(R.array.labelcolor_colors);
+		int count = colors.length();
+		sColors = new int[count];
+		for (int i = 0; i < count; i++) {
+			sColors[i] = colors.getColor(i, 0xFF000000);
+		}
+
+		colors.recycle();
 	}
 
 
@@ -70,7 +78,7 @@ public class ApplicationSettings {
 
 	public static int getColor(int index) {
 		if (sColors != null) {
-			return sColors.getColor(index, 0xFF000000);
+			return sColors[index];
 		}
 
 		Log.d(TAG, "Not initialized");

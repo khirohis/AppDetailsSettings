@@ -12,7 +12,6 @@ import net.hogelab.android.AppDetailsSettings.Model.Entity.PackageInfoEntity;
 import net.hogelab.android.AppDetailsSettings.Presenter.Action.LoadPackageListAction;
 import net.hogelab.android.PFW.PFWAction.PFWActionListener;
 import net.hogelab.android.PFW.PFWAction.Status;
-import net.hogelab.android.PFW.PFWAction;
 import net.hogelab.android.PFW.PFWPresenter;
 import net.hogelab.android.PFW.PFWModel;
 
@@ -95,7 +94,7 @@ public class PackageListPresenter extends PFWPresenter
 	public void loadContent(Object tag) {
 		if (mPackageList == null || mListSettingsModelChanged || mPackageListModelChanged) {
 			LoadPackageListAction action = new LoadPackageListAction(createLoadPackageListActionListener(), tag);
-			PFWAction.executeAction(action);
+			action.execute();
 		} else {
 			postContentLoaded(tag, mPackageList);
 		}
