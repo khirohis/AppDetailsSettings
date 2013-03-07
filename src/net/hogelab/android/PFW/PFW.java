@@ -9,7 +9,7 @@ import android.content.Context;
 public class PFW {
 
 	public static boolean initialize(Context context) {
-		PFWAction.initialize(context);
+		PFWActionExecutor.initialize();
 
 		return true;
 	}

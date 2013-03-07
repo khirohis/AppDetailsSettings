@@ -1,8 +1,5 @@
 package net.hogelab.android.PFW;
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 
 
@@ -12,11 +9,6 @@ import android.util.Log;
 public abstract class PFWAction implements Runnable {
 
 	private static final String TAG = PFWAction.class.getSimpleName();
-
-	private static final String	THREAD_QUEUE_NAME = PFWAction.class.getSimpleName() + "_HandlerThreadQueue";
-
-	private static HandlerThread mHandlerThread = null;
-	private static Handler		mHandler = null;
 
 	protected PFWActionListener	mListener = null;
 	protected Object			mTag = null;
@@ -48,22 +40,6 @@ public abstract class PFWAction implements Runnable {
 
 
 	//--------------------------------------------------
-	// static functions
-
-	public static void initialize(Context context) {
-		mHandlerThread = new HandlerThread(THREAD_QUEUE_NAME);
-		mHandlerThread.start();
-
-		mHandler = new Handler(mHandlerThread.getLooper());
-	}
-
-
-	public static void executeAction(PFWAction action) {
-		mHandler.post(action);
-	}
-
-
-	//--------------------------------------------------
 	// public functions
 
 	public PFWAction(PFWActionListener listener, Object tag) {
@@ -73,10 +49,11 @@ public abstract class PFWAction implements Runnable {
 
 
 	public void execute() {
-		mHandler.post(this);
+		PFWActionExecutor.executeSerial(this);
 	}
 
 	public void asyncExecute() {
+		PFWActionExecutor.executeParallel(this);
 	}
 
 

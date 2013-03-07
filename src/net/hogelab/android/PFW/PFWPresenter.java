@@ -1,8 +1,5 @@
 package net.hogelab.android.PFW;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
@@ -18,8 +15,6 @@ public abstract class PFWPresenter {
 	protected Activity			mActivity = null;
 	protected PFWPresentView	mPresentView = null;
 	protected boolean			mPresentViewVisible = false;
-
-	protected Map<String, PFWAction> mRunningAction = null;
 
 
 	//--------------------------------------------------
@@ -40,7 +35,6 @@ public abstract class PFWPresenter {
 	// public functions
 
 	public PFWPresenter() {
-		mRunningAction = new HashMap<String, PFWAction>();
 	}
 
 
