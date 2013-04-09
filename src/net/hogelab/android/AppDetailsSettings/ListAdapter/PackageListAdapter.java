@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 
 public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 
-	@SuppressWarnings("unused")
 	private static final String TAG = PackageListAdapter.class.getSimpleName();
 
 
@@ -45,10 +45,12 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 		PackageInfoCell cell = null;
 
 		if (convertView == null) {
+			Log.d(TAG, "convertView == null");
 			convertView = mInflater.inflate(R.layout.list_item_packagelist, parent, false);
 			cell = new PackageInfoCell(convertView);
 			convertView.setTag(cell);
 		} else {
+			Log.d(TAG, "convertView != null");
 			cell = (PackageInfoCell)convertView.getTag();
 		}
 
@@ -96,6 +98,7 @@ public class PackageListAdapter extends ArrayAdapter<PackageInfoEntity> {
 				Drawable icon = appInfo.loadIcon(pm);
 				if (icon != null) {
 					applicationIcon.setImageDrawable(icon);
+					icon.setCallback(null);
 				}
 			}
 
